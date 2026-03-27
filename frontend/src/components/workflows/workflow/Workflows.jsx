@@ -14,6 +14,7 @@ import { EmptyState } from "../../widgets/empty-state/EmptyState.jsx";
 import { LazyLoader } from "../../widgets/lazy-loader/LazyLoader.jsx";
 import { SpinnerLoader } from "../../widgets/spinner-loader/SpinnerLoader.jsx";
 import "./Workflows.css";
+import { useTranslation } from "react-i18next";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler.jsx";
 import usePostHogEvents from "../../../hooks/usePostHogEvents.js";
 import {
@@ -26,11 +27,6 @@ import { ViewTools } from "../../custom-tools/view-tools/ViewTools.jsx";
 import { ToolNavBar } from "../../navigations/tool-nav-bar/ToolNavBar.jsx";
 import { workflowService } from "./workflow-service";
 
-const PROJECT_FILTER_OPTIONS = [
-  { label: "My Workflows", value: "mine" },
-  { label: "Organization Workflows", value: "all" },
-];
-
 const { Text } = Typography;
 
 function Workflows() {
@@ -39,6 +35,12 @@ function Workflows() {
   const projectApiService = workflowService();
   const handleException = useExceptionHandler();
   const { setPostHogCustomEvent } = usePostHogEvents();
+  const { t } = useTranslation();
+
+  const PROJECT_FILTER_OPTIONS = [
+    { label: t("workflows.myWorkflows"), value: "mine" },
+    { label: t("workflows.orgWorkflows"), value: "all" },
+  ];
   const { count, isLoading, fetchCount } = usePromptStudioStore();
   const { getPromptStudioCount } = usePromptStudioService();
 
@@ -114,7 +116,7 @@ function Workflows() {
         }
         setAlertDetails({
           type: "success",
-          content: "Workflow updated successfully",
+          content: t("workflows.workflowUpdated"),
         });
         getProjectList();
       })
@@ -122,7 +124,7 @@ function Workflows() {
         setAlertDetails(
           handleException(
             err,
-            `Unable to update workflow ${editingProject.id}`,
+            t("workflows.unableToUpdate", { id: editingProject.id }),
           ),
         );
       })
@@ -165,7 +167,7 @@ function Workflows() {
     const { pipelines, apiNames, pipelineCount, apiCount } = usage;
     const totalCount = pipelineCount + apiCount;
     if (totalCount === 0) {
-      return `Cannot delete \`${workflowName}\` as it is currently in use.`;
+      return t("workflows.cannotDelete", { workflowName });
     }
 
     const displayLimit = 3;
@@ -174,7 +176,7 @@ function Workflows() {
     if (apiNames.length > 0) {
       const shown = apiNames.slice(0, displayLimit);
       shown.forEach((name) => {
-        lines.push(`- \`${name}\` (API Deployment)`);
+        lines.push(`- \`${name}\` (${t("workflows.apiDeployment")})`);
       });
       if (apiCount > shown.length) {
         lines.push(
@@ -188,7 +190,7 @@ function Workflows() {
       shown.forEach((p) => {
         const name = p.pipeline_name;
         const type = p.pipeline_type;
-        lines.push(`- \`${name}\` (${type} Pipeline)`);
+        lines.push(`- \`${name}\` (${type} ${t("workflows.pipeline")})`);
       });
       const remaining = pipelineCount - shown.length;
       if (remaining > 0) {
@@ -210,12 +212,15 @@ function Workflows() {
             getProjectList();
             setAlertDetails({
               type: "success",
-              content: "Workflow deleted successfully",
+              content: t("workflows.workflowDeleted"),
             });
           })
           .catch((err) => {
             setAlertDetails(
-              handleException(err, `Unable to delete workflow ${project.id}`),
+              handleException(
+                err,
+                t("workflows.unableToDelete", { id: project.id }),
+              ),
             );
           });
       } else {
@@ -226,7 +231,7 @@ function Workflows() {
       }
     } catch (err) {
       setAlertDetails(
-        handleException(err, `Unable to delete workflow ${project.id}`),
+        handleException(err, t("workflows.unableToDelete", { id: project.id })),
       );
     }
   };
@@ -259,7 +264,7 @@ function Workflows() {
       setShareOpen(true);
     } catch (err) {
       setAlertDetails(
-        handleException(err, `Unable to fetch sharing information`),
+        handleException(err, t("workflows.unableToFetchSharing")),
       );
     } finally {
       setShareLoading(false);
@@ -277,12 +282,12 @@ function Workflows() {
       setShareOpen(false);
       setAlertDetails({
         type: "success",
-        content: "Workflow sharing updated successfully",
+        content: t("workflows.sharingUpdated"),
       });
       getProjectList(); // Refresh the list
     } catch (error) {
       setAlertDetails(
-        handleException(error, "Unable to update workflow sharing"),
+        handleException(error, t("workflows.unableToUpdateSharing")),
       );
     } finally {
       setShareLoading(false);
@@ -309,7 +314,7 @@ function Workflows() {
         icon={<PlusOutlined />}
         onClick={handleNewWorkflowBtnClick}
       >
-        New Workflow
+        {t("workflows.newWorkflow")}
       </CustomButton>
     );
   };
@@ -341,8 +346,8 @@ function Workflows() {
           {projectListRef.current && isEmpty(projectListRef?.current) && (
             <div className="list-of-workflows-body">
               <EmptyState
-                text="No Workflow available"
-                btnText="New Workflow"
+                text={t("workflows.noWorkflowAvailable")}
+                btnText={t("workflows.newWorkflow")}
                 handleClick={() => {
                   showNewProject();
                   toggleModal(true);
@@ -351,7 +356,7 @@ function Workflows() {
             </div>
           )}
           {isEmpty(projectList) && !isEmpty(projectListRef?.current) && (
-            <EmptyState text="No results found for this search" />
+            <EmptyState text={t("workflows.noResults")} />
           )}
           {!isEmpty(projectList) && (
             <ViewTools

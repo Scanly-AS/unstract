@@ -1,5 +1,6 @@
 import { Col, Empty, Flex, Pagination, Row } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 import { CardItem } from "./CardItem.jsx";
 import { LoadingSkeleton } from "./LoadingSkeleton.jsx";
@@ -44,6 +45,7 @@ function CardGridView({
   scrollToId = null,
   pagination = null,
 }) {
+  const { t } = useTranslation();
   // Default grid configuration
   const defaultGridConfig = {
     gutter: [16, 16],
@@ -95,7 +97,7 @@ function CardGridView({
   if (!data || data.length === 0) {
     return (
       <div className={`card-grid-view card-grid-empty ${className}`}>
-        {emptyState || <Empty description="No items found" />}
+        {emptyState || <Empty description={t("widgets.noItemsFound")} />}
       </div>
     );
   }

@@ -6,6 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Card, Col, Collapse, Row, Space, Tag, Tooltip } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import "./NotesCard.css";
 import { useEffect, useState } from "react";
 import { promptStudioUpdateStatus } from "../../../helpers/GetStaticData";
@@ -33,6 +34,7 @@ function NotesCard({
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditingNote, setIsEditingNote] = useState(false);
   const [expandCard, setExpandCard] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (
@@ -126,7 +128,7 @@ function NotesCard({
                     color="processing"
                     className="display-flex-align-center"
                   >
-                    Updating
+                    {t("common.updating")}
                   </Tag>
                 )}
                 {updateStatus?.status === promptStudioUpdateStatus.done && (
@@ -135,7 +137,7 @@ function NotesCard({
                     color="success"
                     className="display-flex-align-center"
                   >
-                    Done
+                    {t("common.done")}
                   </Tag>
                 )}
               </>
@@ -144,7 +146,7 @@ function NotesCard({
               expandCard={expandCard}
               setExpandCard={setExpandCard}
             />
-            <Tooltip title="Edit">
+            <Tooltip title={t("common.edit")}>
               <Button
                 size="small"
                 type="text"
@@ -156,9 +158,9 @@ function NotesCard({
             </Tooltip>
             <ConfirmModal
               handleConfirm={() => handleDelete(promptDetailsState?.prompt_id)}
-              content="The note will be permanently deleted."
+              content={t("customTools.noteDeleteConfirm")}
             >
-              <Tooltip title="Delete">
+              <Tooltip title={t("common.delete")}>
                 <Button size="small" type="text">
                   <DeleteOutlined className="delete-icon" />
                 </Button>

@@ -1,11 +1,13 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Space, Tooltip, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 function PromptsReorderTitle() {
+  const { t } = useTranslation();
   return (
     <Space>
-      <Typography.Text>Reorder Prompts</Typography.Text>
-      <Tooltip title="Drag and drop the prompts to arrange them in your desired order.">
+      <Typography.Text>{t("customTools.reorderPromptsTitle")}</Typography.Text>
+      <Tooltip title={t("customTools.reorderPromptsDragDrop")}>
         <InfoCircleOutlined />
       </Tooltip>
     </Space>

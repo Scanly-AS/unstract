@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Card, Col, Row, Space, Spin, Tooltip, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
@@ -22,6 +23,7 @@ function Profile() {
   const axiosPrivate = useAxiosPrivate();
   const [profileData, setProfileData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -39,7 +41,7 @@ function Profile() {
       } catch {
         setAlertDetails({
           type: "error",
-          content: "Could not refresh profile data",
+          content: t("profile.couldNotRefresh"),
         });
       } finally {
         setIsLoading(false);
@@ -53,7 +55,7 @@ function Profile() {
     if (!text) {
       setAlertDetails({
         type: "error",
-        content: `No ${label} available to copy`,
+        content: t("profile.noCopyAvailable", { label }),
       });
       return;
     }
@@ -62,12 +64,12 @@ function Profile() {
       await navigator.clipboard.writeText(text);
       setAlertDetails({
         type: "success",
-        content: `${label} copied to clipboard`,
+        content: t("profile.copiedToClipboard", { label }),
       });
     } catch {
       setAlertDetails({
         type: "error",
-        content: `Failed to copy ${label}`,
+        content: t("profile.failedToCopy", { label }),
       });
     }
   };
@@ -83,7 +85,7 @@ function Profile() {
             onClick={() => navigate(-1)}
           />
           <Typography.Text strong className="profile-header-title">
-            Profile
+            {t("profile.title")}
           </Typography.Text>
         </div>
         <div className="profile-outer-container">
@@ -111,7 +113,7 @@ function Profile() {
           onClick={() => navigate(-1)}
         />
         <Typography.Text strong className="profile-header-title">
-          Profile
+          {t("profile.title")}
         </Typography.Text>
       </div>
       {/* White container with cards only */}
@@ -127,10 +129,10 @@ function Profile() {
                   </div>
                   <Space direction="vertical" size={0}>
                     <Typography.Text strong className="card-title">
-                      User Information
+                      {t("profile.userInformation")}
                     </Typography.Text>
                     <Typography.Text type="secondary" className="card-subtitle">
-                      Your personal account details
+                      {t("profile.personalDetails")}
                     </Typography.Text>
                   </Space>
                 </Space>
@@ -141,7 +143,7 @@ function Profile() {
                 >
                   <div className="field-group">
                     <Typography.Text type="secondary" className="field-label">
-                      Full Name
+                      {t("profile.fullName")}
                     </Typography.Text>
                     <div className="field-box">
                       <Typography.Text className="field-value">
@@ -152,7 +154,7 @@ function Profile() {
                   </div>
                   <div className="field-group">
                     <Typography.Text type="secondary" className="field-label">
-                      Email Address
+                      {t("profile.emailAddress")}
                     </Typography.Text>
                     <div className="field-box">
                       <Typography.Text className="field-value">
@@ -174,10 +176,10 @@ function Profile() {
                   </div>
                   <Space direction="vertical" size={0}>
                     <Typography.Text strong className="card-title">
-                      Organization
+                      {t("profile.organization")}
                     </Typography.Text>
                     <Typography.Text type="secondary" className="card-subtitle">
-                      Workspace and role information
+                      {t("profile.workspaceInfo")}
                     </Typography.Text>
                   </Space>
                 </Space>
@@ -188,7 +190,7 @@ function Profile() {
                 >
                   <div className="field-group">
                     <Typography.Text type="secondary" className="field-label">
-                      Organization Name
+                      {t("profile.organizationName")}
                     </Typography.Text>
                     <div className="field-box">
                       <Typography.Text className="field-value">
@@ -198,7 +200,7 @@ function Profile() {
                   </div>
                   <div className="field-group">
                     <Typography.Text type="secondary" className="field-label">
-                      Organization ID
+                      {t("profile.organizationId")}
                     </Typography.Text>
                     <div className="field-with-action">
                       <div className="field-box">
@@ -208,9 +210,7 @@ function Profile() {
                       </div>
                       <Tooltip
                         title={
-                          orgId
-                            ? "Copy Organization ID"
-                            : "No Organization ID available"
+                          orgId ? t("profile.copyOrgId") : t("profile.noOrgId")
                         }
                       >
                         <Button
@@ -226,7 +226,7 @@ function Profile() {
                   {role && (
                     <div className="field-group">
                       <Typography.Text type="secondary" className="field-label">
-                        Your Role
+                        {t("profile.yourRole")}
                       </Typography.Text>
                       <Typography.Text strong className="role-badge">
                         <CheckCircleOutlined />

@@ -1,6 +1,7 @@
 import { Typography } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
@@ -45,6 +46,7 @@ function AddSource({
   metadata,
   selectedDocUrl,
 }) {
+  const { t } = useTranslation();
   const [spec, setSpec] = useState({});
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -149,15 +151,11 @@ function AddSource({
   }, [metadata]);
 
   if (selectedSourceId.includes("pcs|")) {
-    return (
-      <Typography.Text>
-        Edit is not supported for this connector
-      </Typography.Text>
-    );
+    return <Typography.Text>{t("widgets.editNotSupported")}</Typography.Text>;
   }
 
   if (!spec || !Object.keys(spec)?.length) {
-    return <EmptyState text="Failed to load the settings form" />;
+    return <EmptyState text={t("widgets.failedToLoadSettings")} />;
   }
 
   return (

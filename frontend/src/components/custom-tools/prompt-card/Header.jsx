@@ -21,6 +21,7 @@ import {
 import debounce from "lodash/debounce";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   PROMPT_RUN_TYPES,
@@ -69,6 +70,7 @@ function Header({
     isSimplePromptStudio,
     details,
   } = useCustomToolStore();
+  const { t } = useTranslation();
   const [items, setItems] = useState([]);
 
   const [isDisablePrompt, setIsDisablePrompt] = useState(null);
@@ -165,7 +167,7 @@ function Header({
       {
         label: (
           <Checkbox checked={isDisablePrompt} onChange={handleDisablePrompt}>
-            {isDisablePrompt ? "Enabled" : "Disabled"}
+            {isDisablePrompt ? t("common.enabled") : t("common.disabled")}
           </Checkbox>
         ),
         key: "enable",
@@ -178,8 +180,8 @@ function Header({
                 checked={required === "all"}
                 onChange={() => handleRequiredChange("all")}
               >
-                Value Required{" "}
-                <Tooltip title="Marks this as a required field. Saving this record won't be allowed in Human Quality Review should this field be empty.">
+                {t("customTools.valueRequired")}{" "}
+                <Tooltip title={t("customTools.valueRequiredTooltip")}>
                   <InfoCircleOutlined />
                 </Tooltip>
               </Checkbox>
@@ -190,9 +192,9 @@ function Header({
                   checked={required === "all"}
                   onChange={() => handleRequiredChange("all")}
                 >
-                  All JSON Values Required
+                  {t("customTools.allJsonValuesRequired")}
                 </Checkbox>
-                <Tooltip title="When set, saving this record won't be allowed in Human Quality Review without all key/values filled in this JSON structure.">
+                <Tooltip title={t("customTools.allJsonValuesRequiredTooltip")}>
                   <InfoCircleOutlined />
                 </Tooltip>
                 <Checkbox
@@ -200,9 +202,11 @@ function Header({
                   onChange={() => handleRequiredChange("any")}
                   className="required-checkbox-padding"
                 >
-                  At least 1 JSON Value Required
+                  {t("customTools.atLeast1JsonValueRequired")}
                 </Checkbox>
-                <Tooltip title="When set, saving this record won't be allowed in Human Quality Review without at least one value filled in this JSON structure.">
+                <Tooltip
+                  title={t("customTools.atLeast1JsonValueRequiredTooltip")}
+                >
                   <InfoCircleOutlined />
                 </Tooltip>
                 <div
@@ -217,8 +221,12 @@ function Header({
                     onChange={handleWebhookEnabledChange}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    Enable Postprocessing Webhook{" "}
-                    <Tooltip title="Enable external webhook call to postprocess JSON responses before returning to user.">
+                    {t("customTools.enablePostprocessingWebhook")}{" "}
+                    <Tooltip
+                      title={t(
+                        "customTools.enablePostprocessingWebhookTooltip",
+                      )}
+                    >
                       <InfoCircleOutlined />
                     </Tooltip>
                   </Checkbox>
@@ -239,7 +247,9 @@ function Header({
                           marginTop: "4px",
                         }}
                       >
-                        External service URL for JSON postprocessing
+                        {t(
+                          "customTools.externalServiceUrlForJsonPostprocessing",
+                        )}
                       </div>
                     </div>
                   )}
@@ -254,9 +264,9 @@ function Header({
         label: (
           <ConfirmModal
             handleConfirm={() => handleDelete(promptDetails?.prompt_id)}
-            content="The prompt will be permanently deleted."
+            content={t("customTools.promptDeleteConfirm")}
           >
-            <DeleteOutlined /> Delete
+            <DeleteOutlined /> {t("common.delete")}
           </ConfirmModal>
         ),
         key: "delete",
@@ -314,7 +324,7 @@ function Header({
                   color="processing"
                   className="display-flex-align-center"
                 >
-                  Updating
+                  {t("common.updating")}
                 </Tag>
               )}
             </div>
@@ -325,7 +335,7 @@ function Header({
                   color="success"
                   className="display-flex-align-center"
                 >
-                  Done
+                  {t("common.done")}
                 </Tag>
               )}
             </div>
@@ -337,7 +347,7 @@ function Header({
                   color="error"
                   className="display-flex-align-center"
                 >
-                  Invalid JSON Key
+                  {t("customTools.invalidJsonKey")}
                 </Tag>
               )}
             </div>
@@ -345,7 +355,7 @@ function Header({
         )}
         {!singlePassExtractMode && !isSimplePromptStudio && (
           <>
-            <Tooltip title="Run all LLMs for current document">
+            <Tooltip title={t("customTools.runAllLLMsCurrent")}>
               <Button
                 size="small"
                 type="text"
@@ -369,7 +379,7 @@ function Header({
                 <PlayCircleOutlined className="prompt-card-actions-head" />
               </Button>
             </Tooltip>
-            <Tooltip title="Run all LLMs for all documents">
+            <Tooltip title={t("customTools.runAllLLMsAll")}>
               <Button
                 size="small"
                 type="text"

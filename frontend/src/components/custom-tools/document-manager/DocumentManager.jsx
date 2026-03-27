@@ -10,6 +10,7 @@ import "@react-pdf-viewer/page-navigation/lib/styles/index.css";
 import { Button, Space, Tabs, Tag, Tooltip, Typography } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import "./DocumentManager.css";
 
@@ -45,15 +46,16 @@ const viewTypes = {
 
 // Import components for the summarize feature
 let SummarizeView = null;
+let summarizeTabLabel = null;
 try {
   const svMod = await import("../../../plugins/summarize-view/SummarizeView");
   SummarizeView = svMod.SummarizeView;
   const stMod = await import("../../../plugins/summarize-tab/SummarizeTab");
-  const tabLabel = stMod.tabLabel;
-  if (tabLabel) {
+  summarizeTabLabel = stMod.tabLabel;
+  if (summarizeTabLabel) {
     items.push({
       key: "3",
-      label: tabLabel,
+      label: summarizeTabLabel,
     });
   }
 } catch {
@@ -108,6 +110,7 @@ function DocumentManager({ generateIndex, handleUpdateTool, handleDocChange }) {
   const { sessionDetails } = useSessionStore();
   const axiosPrivate = useAxiosPrivate();
   const { setPostHogCustomEvent } = usePostHogEvents();
+  const { t } = useTranslation();
   const { id } = useParams();
   const highlightData = selectedHighlight?.highlight || [];
 
@@ -132,7 +135,7 @@ function DocumentManager({ generateIndex, handleUpdateTool, handleDocChange }) {
         {
           key: "1",
           label: (
-            <Tooltip title="PDF View">
+            <Tooltip title={t("customTools.pdfView")}>
               <FilePdfOutlined />
             </Tooltip>
           ),
@@ -140,7 +143,7 @@ function DocumentManager({ generateIndex, handleUpdateTool, handleDocChange }) {
         {
           key: "2",
           label: (
-            <Tooltip title="Raw View">
+            <Tooltip title={t("customTools.rawView")}>
               <FileTextOutlined />
             </Tooltip>
           ),
@@ -447,7 +450,7 @@ function DocumentManager({ generateIndex, handleUpdateTool, handleDocChange }) {
               ) : null}
             </div>
             <div>
-              <Tooltip title="Manage Document Variants">
+              <Tooltip title={t("customTools.manageDocumentVariants")}>
                 <Button
                   className="doc-manager-btn"
                   onClick={() => setOpenManageDocsModal(true)}

@@ -11,6 +11,7 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { getBackendErrorDetail } from "../../../helpers/GetStaticData";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
@@ -40,6 +41,7 @@ const CreateApiDeploymentFromPromptStudio = ({
   const apiDeploymentsApiService = apiDeploymentsService();
   const { setPostHogCustomEvent } = usePostHogEvents();
   const { getUrl } = useRequestUrl();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [form] = Form.useForm();
@@ -603,8 +605,8 @@ const CreateApiDeploymentFromPromptStudio = ({
       {!isCreationComplete && (
         <div className="steps-container">
           <Steps current={currentStep} size="small">
-            <Step title="Deployment Details" />
-            <Step title="Tool Settings" />
+            <Step title={t("deployments.deploymentDetails")} />
+            <Step title={t("deployments.toolSettings")} />
           </Steps>
         </div>
       )}

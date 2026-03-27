@@ -15,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { SpinnerLoader } from "../spinner-loader/SpinnerLoader";
 
@@ -28,6 +29,7 @@ function SharePermission({
   onApply,
   isSharableToOrg = false,
 }) {
+  const { t } = useTranslation();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [shareWithEveryone, setShareWithEveryone] = useState(false);
@@ -82,7 +84,9 @@ function SharePermission({
 
   let sharedWithContent;
   if (shareWithEveryone) {
-    sharedWithContent = <Typography.Text>Shared with everyone</Typography.Text>;
+    sharedWithContent = (
+      <Typography.Text>{t("widgets.sharedWithEveryone")}</Typography.Text>
+    );
   } else if (selectedUsers.length > 0) {
     sharedWithContent = (
       <List
@@ -106,10 +110,12 @@ function SharePermission({
                 <div onClick={(event) => event.stopPropagation()} role="none">
                   <Popconfirm
                     key={`${item.id}-delete`}
-                    title="Revoke Access"
-                    description={`Are you sure you want to revoke access to '${item?.email}'?`}
-                    okText="Yes"
-                    cancelText="No"
+                    title={t("widgets.revokeAccess")}
+                    description={t("widgets.confirmRevoke", {
+                      email: item?.email,
+                    })}
+                    okText={t("widgets.yes")}
+                    cancelText={t("widgets.no")}
                     icon={<QuestionCircleOutlined />}
                     onConfirm={(event) => handleDeleteUser(item?.id)}
                   >
@@ -139,13 +145,13 @@ function SharePermission({
       />
     );
   } else {
-    sharedWithContent = <Typography>Not shared with anyone yet</Typography>;
+    sharedWithContent = <Typography>{t("widgets.notSharedYet")}</Typography>;
   }
 
   return (
     adapter && (
       <Modal
-        title={"Share Users"}
+        title={t("widgets.shareUsers")}
         open={open}
         onCancel={() => setOpen(false)}
         maskClosable={false}
@@ -200,7 +206,9 @@ function SharePermission({
                 })}
               </Select>
             )}
-            <Typography.Title level={5}>Shared with</Typography.Title>
+            <Typography.Title level={5}>
+              {t("widgets.sharedWith")}
+            </Typography.Title>
             {sharedWithContent}
           </>
         )}

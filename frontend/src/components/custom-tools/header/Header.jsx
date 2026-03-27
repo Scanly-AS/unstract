@@ -2,6 +2,7 @@ import { SettingOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Modal, Tooltip, Typography } from "antd";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ExportToolIcon } from "../../../assets";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
@@ -70,6 +71,7 @@ function Header({
   ] = useState(false);
   const [existingApiDeployments, setExistingApiDeployments] = useState([]);
   const [isApiDeploymentLoading, setIsApiDeploymentLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleExport = (
     selectedUsers,
@@ -96,7 +98,7 @@ function Header({
       .then(() => {
         setAlertDetails({
           type: "success",
-          content: "Custom tool exported successfully",
+          content: t("customTools.toolExported"),
         });
         // Clear the export reminder after successful export
         markChangesAsExported();
@@ -111,7 +113,7 @@ function Header({
           setConfirmModalVisible(true); // Show the confirmation modal
           return; // Exit early to prevent any further execution
         }
-        setAlertDetails(handleException(err, "Failed to export"));
+        setAlertDetails(handleException(err, t("customTools.failedToExport")));
       })
       .finally(() => {
         setIsExportLoading(false);
@@ -183,7 +185,7 @@ function Header({
         return users;
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to load"));
+        setAlertDetails(handleException(err, t("customTools.failedToLoad")));
       })
       .finally(() => {
         setIsExportLoading(false);
@@ -242,11 +244,13 @@ function Header({
 
         setAlertDetails({
           type: "success",
-          content: "Project exported successfully",
+          content: t("customTools.projectExported"),
         });
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to export project"));
+        setAlertDetails(
+          handleException(err, t("customTools.failedToExportProject")),
+        );
       })
       .finally(() => {
         setIsExportLoading(false);
@@ -279,7 +283,7 @@ function Header({
       })
       .catch((err) => {
         setAlertDetails(
-          handleException(err, "Failed to check existing deployments"),
+          handleException(err, t("customTools.failedToCheckDeployments")),
         );
         // If check fails, still allow proceeding
         setOpenCreateApiDeploymentModal(true);
@@ -310,7 +314,7 @@ function Header({
           <SinglePassToggleSwitch handleUpdateTool={handleUpdateTool} />
         )}
         <div>
-          <Tooltip title="Settings">
+          <Tooltip title={t("customTools.settings")}>
             <Button
               icon={<SettingOutlined />}
               onClick={() => setOpenSettings(true)}
@@ -326,19 +330,19 @@ function Header({
                 ? [
                     {
                       key: "public-share",
-                      label: "Create / Manage Public Sharing",
+                      label: t("customTools.createManageSharing"),
                       onClick: () => setOpenShareModal(true),
                     },
                   ]
                 : []),
               {
                 key: "export-tool",
-                label: "Export as Tool",
+                label: t("customTools.exportAsTool"),
                 onClick: () => handleShare(true),
               },
               {
                 key: "export-json",
-                label: "Export as JSON",
+                label: t("customTools.exportAsJSON"),
                 onClick: handleExportProject,
               },
             ],
@@ -353,7 +357,7 @@ function Header({
             icon={<ExportToolIcon />}
             className="export-text"
           >
-            Export
+            {t("customTools.export")}
           </CustomButton>
         </Dropdown>
         <div>
@@ -365,7 +369,7 @@ function Header({
             className="export-text"
             onClick={handleCreateApiDeployment}
           >
-            Deploy as API
+            {t("customTools.deployAsAPI")}
           </CustomButton>
         </div>
         <ExportTool
@@ -388,42 +392,38 @@ function Header({
         onOk={handleConfirmForceExport} // Pass the confirm action
         onCancel={() => setConfirmModalVisible(false)} // Close the modal on cancel
         open={confirmModalVisible}
-        title="Are you sure"
-        okText="Force Export"
+        title={t("customTools.areYouSure")}
+        okText={t("customTools.forceExport")}
         centered
       >
-        Unable to export tool. Some prompt(s) were not run. Please run them
-        before exporting.{" "}
-        <strong>Would you like to force export anyway?</strong>
+        {t("customTools.forceExportMessage")}
       </Modal>
       <Modal
         onOk={handleConfirmApiDeployment}
         onCancel={() => setApiDeploymentConfirmModalVisible(false)}
         open={apiDeploymentConfirmModalVisible}
-        title="Create API Deployment"
-        okText="Proceed"
+        title={t("customTools.createApiDeployment")}
+        okText={t("customTools.proceed")}
         centered
         width={600}
       >
         <div className="api-deployment-modal-content">
           <p>
-            <strong>
-              You are about to create a new API deployment for this tool.
-            </strong>
+            <strong>{t("customTools.aboutToCreateDeployment")}</strong>
           </p>
         </div>
         {existingApiDeployments.length > 0 && (
           <div className="api-deployment-notice">
             <p className="api-deployment-notice-title">
-              Notice: You have {existingApiDeployments.length} existing API
-              deployment{existingApiDeployments.length > 1 ? "s" : ""}
+              {t("customTools.existingDeployments", {
+                count: existingApiDeployments.length,
+              })}
             </p>
             <p className="api-deployment-notice-description">
-              Creating a new deployment will add another API endpoint. Consider
-              managing existing deployments if needed.
+              {t("customTools.newDeploymentNotice")}
             </p>
             <div className="api-deployment-existing-section">
-              <strong>Existing deployments:</strong>
+              <strong>{t("customTools.existingDeploymentsList")}</strong>
               <ul className="api-deployment-existing-list">
                 {existingApiDeployments.map((deployment) => (
                   <li
@@ -434,7 +434,9 @@ function Header({
                     {deployment.api_name && (
                       <span className="api-deployment-api-name">
                         {" "}
-                        (API: {deployment.api_name})
+                        {t("customTools.apiDeploymentName", {
+                          name: deployment.api_name,
+                        })}
                       </span>
                     )}
                   </li>
@@ -443,7 +445,7 @@ function Header({
             </div>
           </div>
         )}
-        <p>Do you want to proceed with creating the API deployment?</p>
+        <p>{t("customTools.proceedWithDeployment")}</p>
       </Modal>
     </div>
   );

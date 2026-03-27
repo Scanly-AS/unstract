@@ -1,6 +1,7 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Input, Select, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useAlertStore } from "../../../store/alert-store";
@@ -12,26 +13,6 @@ import SpaceWrapper from "../../widgets/space-wrapper/SpaceWrapper";
 import "./CustomSynonyms.css";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
 
-const columns = [
-  {
-    title: "Word",
-    dataIndex: "word",
-    key: "word",
-    width: 200,
-  },
-  {
-    title: "Synonyms",
-    dataIndex: "synonyms",
-    key: "synonyms",
-  },
-  {
-    title: "",
-    dataIndex: "delete",
-    key: "delete",
-    width: 30,
-  },
-];
-
 const PAGE_SIZE = 10;
 const SYNONYMS_LIMIT = 200;
 
@@ -41,6 +22,28 @@ const actionTypes = {
 };
 
 function CustomSynonyms() {
+  const { t } = useTranslation();
+
+  const columns = [
+    {
+      title: t("customTools.word"),
+      dataIndex: "word",
+      key: "word",
+      width: 200,
+    },
+    {
+      title: t("customTools.synonyms"),
+      dataIndex: "synonyms",
+      key: "synonyms",
+    },
+    {
+      title: "",
+      dataIndex: "delete",
+      key: "delete",
+      width: 30,
+    },
+  ];
+
   const [synonyms, setSynonyms] = useState([]);
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,7 +104,7 @@ function CustomSynonyms() {
         synonyms: (
           <Select
             mode="tags"
-            placeholder="Please enter synonyms"
+            placeholder={t("customTools.pleaseEnterSynonyms")}
             value={listOfSynonyms}
             className="cus-syn-select"
             variant="borderless"

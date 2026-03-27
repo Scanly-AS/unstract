@@ -1,5 +1,6 @@
 import { Card, Dropdown, Popconfirm, Typography } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import "./GridView.css";
 import {
@@ -11,6 +12,7 @@ import {
 
 function GridView({ listOfTools, handleEdit, handleDelete }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="grid-view-wrapper">
@@ -38,10 +40,10 @@ function GridView({ listOfTools, handleEdit, handleDelete }) {
                       {
                         label: (
                           <Popconfirm
-                            title="Delete the tool"
-                            description="Are you sure to delete this tool?"
-                            okText="Yes"
-                            cancelText="No"
+                            title={t("widgets.deleteTool")}
+                            description={t("widgets.confirmDeleteTool")}
+                            okText={t("widgets.yes")}
+                            cancelText={t("widgets.no")}
                             icon={
                               <QuestionCircleOutlined
                                 style={{

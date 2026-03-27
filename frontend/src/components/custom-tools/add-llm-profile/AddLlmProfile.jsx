@@ -18,6 +18,7 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { getBackendErrorDetail } from "../../../helpers/GetStaticData";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
@@ -61,6 +62,7 @@ function AddLlmProfile({
   const handleException = useExceptionHandler();
   const { setPostHogCustomEvent } = usePostHogEvents();
   const { getStrategies } = useRetrievalStrategies();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setAdaptorProfilesDropdown();
@@ -250,7 +252,7 @@ function AddLlmProfile({
       children: (
         <div>
           <Form.Item
-            label="Retrieval Strategy"
+            label={t("customTools.retrievalStrategy")}
             name="retrieval_strategy"
             validateStatus={
               getBackendErrorDetail("retrieval_strategy", backendErrors)
@@ -263,7 +265,7 @@ function AddLlmProfile({
               type="button"
               className="retrieval-strategy-selector"
               onClick={handleRetrievalModalOpen}
-              aria-label="Select retrieval strategy"
+              aria-label={t("customTools.selectRetrievalStrategy")}
               aria-expanded={isRetrievalModalVisible}
               aria-haspopup="dialog"
             >
@@ -277,8 +279,8 @@ function AddLlmProfile({
                 {formDetails.retrieval_strategy
                   ? retrievalItems.find(
                       (item) => item.value === formDetails.retrieval_strategy,
-                    )?.label || "Select retrieval strategy"
-                  : "Select retrieval strategy"}
+                    )?.label || t("customTools.selectRetrievalStrategy")
+                  : t("customTools.selectRetrievalStrategy")}
               </span>
               <div className="retrieval-strategy-actions">
                 <SettingOutlined
@@ -290,7 +292,7 @@ function AddLlmProfile({
             </button>
           </Form.Item>
           <Form.Item
-            label="Matching count limit (similarity top-k)"
+            label={t("customTools.similarityTopK")}
             name="similarity_top_k"
             validateStatus={
               getBackendErrorDetail("similarity_top_k", backendErrors)
@@ -302,7 +304,7 @@ function AddLlmProfile({
             <Input type="number" />
           </Form.Item>
           <Form.Item
-            label="Limit-to Section"
+            label={t("customTools.limitToSection")}
             name="section"
             validateStatus={
               getBackendErrorDetail("section", backendErrors) ? "error" : ""
@@ -362,7 +364,7 @@ function AddLlmProfile({
         updateCustomTool(updatedState);
         setAlertDetails({
           type: "success",
-          content: "Saved successfully",
+          content: t("customTools.savedSuccessfully"),
         });
 
         if (newLlmProfiles?.length === 1) {
@@ -476,12 +478,12 @@ function AddLlmProfile({
           </div>
           <div>
             <Form.Item
-              label="Name"
+              label={t("common.name")}
               name="profile_name"
               rules={[
                 {
                   required: true,
-                  message: "Please enter the name",
+                  message: t("customTools.pleaseEnterName"),
                 },
                 { validator: validateEmptyOrWhitespace },
               ]}
@@ -497,10 +499,13 @@ function AddLlmProfile({
             <Row className="add-llm-profile-row">
               <Col span={15}>
                 <Form.Item
-                  label="LLM"
+                  label={t("customTools.llm")}
                   name="llm"
                   rules={[
-                    { required: true, message: "Please enter the LLM" },
+                    {
+                      required: true,
+                      message: t("customTools.pleaseEnterLLM"),
+                    },
                     { validator: validateEmptyOrWhitespace },
                   ]}
                   validateStatus={
@@ -530,7 +535,7 @@ function AddLlmProfile({
                   rules={[
                     {
                       required: true,
-                      message: "Please enter the chunk size",
+                      message: t("customTools.pleaseEnterChunkSize"),
                     },
                   ]}
                   validateStatus={
@@ -548,12 +553,12 @@ function AddLlmProfile({
             <Row className="add-llm-profile-row">
               <Col span={15}>
                 <Form.Item
-                  label="Vector Database"
+                  label={t("customTools.vectorDatabase")}
                   name="vector_store"
                   rules={[
                     {
                       required: true,
-                      message: "Please select the vector store",
+                      message: t("customTools.pleaseSelectVectorStore"),
                     },
                     { validator: validateEmptyOrWhitespace },
                   ]}
@@ -570,12 +575,12 @@ function AddLlmProfile({
               <Col span={1} />
               <Col span={8}>
                 <Form.Item
-                  label="Overlap"
+                  label={t("customTools.overlap")}
                   name="chunk_overlap"
                   rules={[
                     {
                       required: true,
-                      message: "Please enter the overlap",
+                      message: t("customTools.pleaseEnterOverlap"),
                     },
                   ]}
                   validateStatus={
@@ -590,12 +595,12 @@ function AddLlmProfile({
               </Col>
             </Row>
             <Form.Item
-              label="Embedding Model"
+              label={t("customTools.embeddingModel")}
               name="embedding_model"
               rules={[
                 {
                   required: true,
-                  message: "Please select the embedding model",
+                  message: t("customTools.pleaseSelectEmbedding"),
                 },
                 { validator: validateEmptyOrWhitespace },
               ]}
@@ -609,12 +614,12 @@ function AddLlmProfile({
               <Select options={embeddingItems} />
             </Form.Item>
             <Form.Item
-              label="Text Extractor"
+              label={t("sidebar.textExtractor")}
               name="x2text"
               rules={[
                 {
                   required: true,
-                  message: "Please select the text extractor",
+                  message: t("customTools.pleaseSelectTextExtractor"),
                 },
                 { validator: validateEmptyOrWhitespace },
               ]}

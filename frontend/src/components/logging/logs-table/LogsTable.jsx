@@ -7,16 +7,17 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { logsStaticContent } from "../../../helpers/GetStaticData";
 import { useSessionStore } from "../../../store/session-store";
 import { EmptyState } from "../../widgets/empty-state/EmptyState";
 
 // Search filter dropdown component for execution ID column
-const SearchFilterDropdown = ({ value, onChange }) => (
+const SearchFilterDropdown = ({ value, onChange, t }) => (
   <div className="search-container">
     <Input
-      placeholder="Search execution ID"
+      placeholder={t("logging.searchExecutionId")}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className="search-input"
@@ -27,6 +28,7 @@ const SearchFilterDropdown = ({ value, onChange }) => (
 SearchFilterDropdown.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 // Search filter icon component
@@ -49,10 +51,11 @@ const LogsTable = ({
   setExecutionIdSearch,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { sessionDetails } = useSessionStore();
   const columns = [
     {
-      title: "Executed At",
+      title: t("logging.executedAt"),
       dataIndex: "executedAt",
       key: "executedAt",
       showSorterTooltip: { target: "full-header" },
@@ -64,13 +67,14 @@ const LogsTable = ({
       ),
     },
     {
-      title: "Execution ID",
+      title: t("logging.executionId"),
       dataIndex: "executionId",
       key: "executionId",
       filterDropdown: (
         <SearchFilterDropdown
           value={executionIdSearch}
           onChange={setExecutionIdSearch}
+          t={t}
         />
       ),
       filterIcon: <SearchFilterIcon isActive={!!executionIdSearch} />,
@@ -84,7 +88,7 @@ const LogsTable = ({
       ),
     },
     {
-      title: "Execution Name",
+      title: t("logging.executionName"),
       dataIndex: "pipelineName",
       key: "executionName",
       render: (_, record) =>
@@ -101,24 +105,24 @@ const LogsTable = ({
         ),
     },
     {
-      title: "Status",
+      title: t("logging.status"),
       dataIndex: "status",
       key: "status",
       render: (_, record) => (
         <span>
-          <Tooltip title="Successful files">
+          <Tooltip title={t("logging.successfulFiles")}>
             <span className="status-container">
               <InfoCircleFilled className="gen-index-success" />{" "}
               {record?.successfulFiles}
             </span>
           </Tooltip>
-          <Tooltip title="Failed files">
+          <Tooltip title={t("logging.failedFiles")}>
             <span className="status-container">
               <CloseCircleFilled className="gen-index-fail" />{" "}
               {record?.failedFiles}
             </span>
           </Tooltip>
-          <Tooltip title="Queued files">
+          <Tooltip title={t("logging.queuedFiles")}>
             {record?.totalFiles -
               (record?.successfulFiles + record?.failedFiles) >
               0 && (
@@ -133,13 +137,13 @@ const LogsTable = ({
       ),
     },
     {
-      title: "Files Processed",
+      title: t("logging.filesProcessed"),
       dataIndex: "filesProcessed",
       key: "filesProcessed",
       render: (_, record) => `${record?.processed}/${record?.totalFiles}`,
     },
     {
-      title: "Execution Time",
+      title: t("logging.executionTime"),
       dataIndex: "executionTime",
       key: "executionTime",
       sorter: true,
@@ -178,7 +182,11 @@ const LogsTable = ({
         showSizeChanger: true,
         pageSizeOptions: ["10", "20", "50", "100"],
         showTotal: (total, range) =>
-          `${range[0]}-${range[1]} of ${total} executions`,
+          t("logging.paginationRange", {
+            start: range[0],
+            end: range[1],
+            total,
+          }),
       }}
       bordered
       size="small"

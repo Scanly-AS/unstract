@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Users.css";
 
+import { useTranslation } from "react-i18next";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler.jsx";
 import usePostHogEvents from "../../../hooks/usePostHogEvents.js";
@@ -26,6 +27,7 @@ function Users() {
   const navigate = useNavigate();
   const handleException = useExceptionHandler();
   const { setPostHogCustomEvent } = usePostHogEvents();
+  const { t } = useTranslation();
 
   const [userList, setUserList] = useState([]);
   const [filteredUserList, setFilteredUserList] = useState(userList);
@@ -63,7 +65,7 @@ function Users() {
         removeUser(selectedUserEmail.email);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to delete user"));
+        setAlertDetails(handleException(err, t("users.failedToDelete")));
         setConfirmLoading(false);
         setOpen(false);
       });
@@ -90,7 +92,7 @@ function Users() {
         })),
       );
     } catch (err) {
-      setAlertDetails(handleException(err, "Failed to load"));
+      setAlertDetails(handleException(err, t("users.failedToLoad")));
     } finally {
       setIsTableLoading(false);
     }
@@ -113,7 +115,7 @@ function Users() {
             <EditOutlined />
           </div>
           <div>
-            <Typography.Text>Edit</Typography.Text>
+            <Typography.Text>{t("users.edit")}</Typography.Text>
           </div>
         </Space>
       ),
@@ -130,7 +132,7 @@ function Users() {
             <DeleteOutlined />
           </div>
           <div>
-            <Typography.Text>Delete</Typography.Text>
+            <Typography.Text>{t("users.delete")}</Typography.Text>
           </div>
         </Space>
       ),
@@ -138,17 +140,17 @@ function Users() {
   ];
   const baseColumns = [
     {
-      title: "Email",
+      title: t("users.email"),
       dataIndex: "email",
     },
     {
-      title: "Role",
+      title: t("users.role"),
       dataIndex: "role",
     },
   ];
 
   const actionColumn = {
-    title: "Actions",
+    title: t("users.actions"),
     align: "center",
     render: (_, record) => (
       <Dropdown
@@ -192,7 +194,7 @@ function Users() {
     <>
       <TopBar
         enableSearch={true}
-        title="Manage Users"
+        title={t("users.manageUsers")}
         searchData={userList}
         setFilteredUserList={setFilteredUserList}
       >
@@ -202,7 +204,7 @@ function Users() {
             icon={<PlusOutlined />}
             onClick={handleInviteUsers}
           >
-            Invite User
+            {t("users.inviteUser")}
           </CustomButton>
         )}
         <Button
@@ -228,7 +230,7 @@ function Users() {
         </IslandLayout>
       </div>
       <Modal
-        title="Delete User"
+        title={t("users.deleteUser")}
         open={open}
         onOk={handleDelete}
         confirmLoading={confirmLoading}
@@ -236,7 +238,7 @@ function Users() {
         centered
         className="delete-user-modal"
       >
-        <Typography>Are you sure you want to delete user id</Typography>
+        <Typography>{t("users.confirmDelete")}</Typography>
         <Text strong>{selectedUserEmail?.email}</Text>
       </Modal>
     </>

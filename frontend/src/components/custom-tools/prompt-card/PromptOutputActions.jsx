@@ -1,6 +1,7 @@
 import { PlayCircleFilled, PlayCircleOutlined } from "@ant-design/icons";
 import { Button, Tooltip } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 import { useCustomToolStore } from "../../../store/custom-tool-store";
 
@@ -11,6 +12,7 @@ function PromptOutputActions({
   isRunLoading,
 }) {
   const { selectedDoc, isPublicSource } = useCustomToolStore();
+  const { t } = useTranslation();
 
   if (isNotSingleLlmProfile) {
     return <></>;
@@ -18,7 +20,7 @@ function PromptOutputActions({
 
   return (
     <>
-      <Tooltip title="Run">
+      <Tooltip title={t("customTools.run")}>
         <Button
           size="small"
           type="text"
@@ -32,7 +34,7 @@ function PromptOutputActions({
           <PlayCircleOutlined className="prompt-card-actions-head" />
         </Button>
       </Tooltip>
-      <Tooltip title="Run All">
+      <Tooltip title={t("customTools.runAll")}>
         <Button
           size="small"
           type="text"

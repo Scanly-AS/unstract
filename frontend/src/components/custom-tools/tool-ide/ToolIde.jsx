@@ -1,5 +1,6 @@
 import { Col, Row } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
@@ -67,6 +68,7 @@ function ToolIde() {
   const axiosPrivate = useAxiosPrivate();
   const handleException = useExceptionHandler();
   const { setPostHogCustomEvent } = usePostHogEvents();
+  const { t } = useTranslation();
   const [openShareLink, setOpenShareLink] = useState(false);
   const [openShareConfirmation, setOpenShareConfirmation] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
@@ -209,7 +211,7 @@ function ToolIde() {
 
       setAlertDetails({
         type: "success",
-        content: "Custom tool exported successfully",
+        content: t("customTools.toolExported"),
       });
 
       // Mark changes as exported
@@ -245,7 +247,7 @@ function ToolIde() {
     if (indexDocs.includes(docId)) {
       setAlertDetails({
         type: "error",
-        content: "This document is already getting indexed",
+        content: t("customTools.alreadyIndexing"),
       });
       return;
     }
@@ -314,7 +316,7 @@ function ToolIde() {
     if (isMultiPassExtractLoading) {
       setAlertDetails({
         type: "error",
-        content: "Please wait for the run to complete",
+        content: t("customTools.waitForRun"),
       });
       return;
     }

@@ -2,6 +2,7 @@ import { ArrowDownOutlined, PlusOutlined } from "@ant-design/icons";
 import { Space } from "antd";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useAlertStore } from "../../../store/alert-store";
@@ -21,6 +22,7 @@ const DefaultCustomButtons = ({
   isImportLoading,
   handleNewProjectBtnClick,
 }) => {
+  const { t } = useTranslation();
   return (
     <Space gap={16}>
       <CustomButton
@@ -29,14 +31,14 @@ const DefaultCustomButtons = ({
         onClick={() => setOpenImportTool(true)}
         loading={isImportLoading}
       >
-        Import Project
+        {t("customTools.importProject")}
       </CustomButton>
       <CustomButton
         type="primary"
         icon={<PlusOutlined />}
         onClick={handleNewProjectBtnClick}
       >
-        New Project
+        {t("customTools.newProject")}
       </CustomButton>
     </Space>
   );
@@ -59,6 +61,7 @@ function ListOfTools() {
   const { setAlertDetails } = useAlertStore();
   const axiosPrivate = useAxiosPrivate();
   const handleException = useExceptionHandler();
+  const { t } = useTranslation();
 
   const [listOfTools, setListOfTools] = useState([]);
   const [filteredListOfTools, setFilteredListOfTools] = useState([]);
@@ -96,7 +99,7 @@ function ListOfTools() {
       })
       .catch((err) => {
         setAlertDetails(
-          handleException(err, "Failed to get the list of tools"),
+          handleException(err, t("customTools.failedToGetTools")),
         );
       })
       .finally(() => {
@@ -179,7 +182,7 @@ function ListOfTools() {
         setListOfTools(tools);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to Delete"));
+        setAlertDetails(handleException(err, t("customTools.failedToDelete")));
       });
   };
 
@@ -263,7 +266,9 @@ function ListOfTools() {
         getListOfTools();
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to import project"));
+        setAlertDetails(
+          handleException(err, t("customTools.failedToImportProject")),
+        );
       })
       .finally(() => {
         setIsImportLoading(false);
@@ -312,7 +317,7 @@ function ListOfTools() {
         );
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to load"));
+        setAlertDetails(handleException(err, t("customTools.failedToLoad")));
       })
       .finally(() => {
         setIsShareLoading(false);
@@ -336,7 +341,7 @@ function ListOfTools() {
         setOpenSharePermissionModal(false);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to load"));
+        setAlertDetails(handleException(err, t("customTools.failedToLoad")));
       });
   };
 
@@ -353,7 +358,7 @@ function ListOfTools() {
         descriptionProp="description"
         iconProp="icon"
         idProp="tool_id"
-        type="Prompt Project"
+        type={t("customTools.promptProject")}
         handleShare={handleShare}
       />
     </div>
@@ -373,7 +378,7 @@ function ListOfTools() {
   return (
     <>
       <ToolNavBar
-        title={"Prompt Studio"}
+        title={t("customTools.promptStudio")}
         enableSearch
         onSearch={onSearch}
         searchList={listOfTools}

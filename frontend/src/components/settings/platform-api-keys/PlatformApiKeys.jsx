@@ -19,6 +19,7 @@ import {
   Typography,
 } from "antd";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
@@ -53,6 +54,7 @@ function PlatformApiKeys() {
   const navigate = useNavigate();
   const handleException = useExceptionHandler();
   const copyToClipboard = useCopyToClipboard();
+  const { t } = useTranslation();
 
   const basePath = `/api/v1/unstract/${sessionDetails?.orgId}/platform-api`;
 
@@ -241,7 +243,7 @@ function PlatformApiKeys() {
       key: "key",
       width: "14%",
       render: (_, record) => (
-        <Tooltip title="Click to copy">
+        <Tooltip title={t("platformApiKeys.clickToCopy")}>
           <Button
             type="text"
             className="platform-api-keys__key-cell"
@@ -302,15 +304,15 @@ function PlatformApiKeys() {
         <div className="platform-api-keys__actions">
           <ConfirmModal
             handleConfirm={() => handleRotate(record)}
-            title="Rotate API Key"
-            content="This will generate a new key and invalidate the current one. Continue?"
-            okText="Rotate"
+            title={t("platformApiKeys.rotateApiKey")}
+            content={t("platformApiKeys.rotateConfirm")}
+            okText={t("platformApiKeys.rotate")}
           >
-            <Tooltip title="Rotate key">
+            <Tooltip title={t("platformApiKeys.rotateKey")}>
               <Button size="small" icon={<SyncOutlined />} />
             </Tooltip>
           </ConfirmModal>
-          <Tooltip title="Edit">
+          <Tooltip title={t("platformApiKeys.edit")}>
             <Button
               size="small"
               icon={<EditOutlined />}
@@ -319,11 +321,11 @@ function PlatformApiKeys() {
           </Tooltip>
           <ConfirmModal
             handleConfirm={() => handleDelete(record)}
-            title="Delete API Key"
-            content="Are you sure you want to delete this API key? This action cannot be undone."
-            okText="Delete"
+            title={t("platformApiKeys.deleteApiKey")}
+            content={t("platformApiKeys.deleteConfirm")}
+            okText={t("platformApiKeys.delete")}
           >
-            <Tooltip title="Delete">
+            <Tooltip title={t("platformApiKeys.delete")}>
               <Button size="small" danger icon={<DeleteOutlined />} />
             </Tooltip>
           </ConfirmModal>
@@ -376,14 +378,14 @@ function PlatformApiKeys() {
 
       {/* Create Modal */}
       <Modal
-        title="Create API Key"
+        title={t("platformApiKeys.createApiKey")}
         open={isCreateModalOpen}
         onOk={handleCreate}
         onCancel={() => {
           setIsCreateModalOpen(false);
           createForm.resetFields();
         }}
-        okText="Create"
+        okText={t("platformApiKeys.create")}
         confirmLoading={isSaving}
         centered
       >
@@ -432,7 +434,7 @@ function PlatformApiKeys() {
 
       {/* Edit Modal */}
       <Modal
-        title="Edit API Key"
+        title={t("platformApiKeys.editApiKey")}
         open={isEditModalOpen}
         onOk={handleEdit}
         onCancel={() => {
@@ -440,7 +442,7 @@ function PlatformApiKeys() {
           editForm.resetFields();
           setSelectedKey(null);
         }}
-        okText="Save"
+        okText={t("platformApiKeys.save")}
         confirmLoading={isSaving}
         centered
       >

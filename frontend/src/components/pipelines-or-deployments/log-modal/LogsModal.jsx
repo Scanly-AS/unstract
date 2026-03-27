@@ -1,6 +1,7 @@
 import { Button, Modal, Table } from "antd";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate.js";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler.jsx";
 import { useAlertStore } from "../../../store/alert-store.js";
@@ -16,6 +17,7 @@ const LogsModal = ({
   fetchExecutionLogs,
   loading = false,
 }) => {
+  const { t } = useTranslation();
   const [selectedLogId, setSelectedLogId] = useState(null);
   const [logDescModalOpen, setLogDescModalOpen] = useState(false);
   const [logDetails, setLogDetails] = useState([]);
@@ -63,12 +65,12 @@ const LogsModal = ({
 
   const logColumns = [
     {
-      title: "Executed At",
+      title: t("pipelines.executedAt"),
       dataIndex: "created_at",
       key: "created_at",
     },
     {
-      title: "Execution ID",
+      title: t("pipelines.executionId"),
       dataIndex: "execution_id",
       key: "execution_id",
       render: (text, record) => {
@@ -83,7 +85,7 @@ const LogsModal = ({
       },
     },
     {
-      title: "Status",
+      title: t("pipelines.status"),
       dataIndex: "status",
       key: "status",
       render: (level) => <span className={level?.toLowerCase()}>{level}</span>,
@@ -92,23 +94,23 @@ const LogsModal = ({
 
   const logDetailsColumns = [
     {
-      title: "Event Time",
+      title: t("pipelines.eventTime"),
       dataIndex: "event_time",
       key: "event_time",
     },
     {
-      title: "Event Stage",
+      title: t("pipelines.eventStage"),
       dataIndex: "stage",
       key: "stage",
     },
     {
-      title: "Log Level",
+      title: t("pipelines.logLevel"),
       dataIndex: "level",
       key: "level",
       render: (level) => <span className={level?.toLowerCase()}>{level}</span>,
     },
     {
-      title: "Log",
+      title: t("pipelines.log"),
       dataIndex: "log",
       key: "log",
     },
@@ -117,7 +119,7 @@ const LogsModal = ({
   return (
     <>
       <Modal
-        title="Execution Logs"
+        title={t("pipelines.executionLogs")}
         centered
         open={open}
         onCancel={() => setOpen(false)}
@@ -140,7 +142,7 @@ const LogsModal = ({
       </Modal>
 
       <Modal
-        title={`Execution Log Details - ${selectedLogId}`}
+        title={t("pipelines.executionLogDetails", { selectedLogId })}
         centered
         open={logDescModalOpen}
         onCancel={() => setLogDescModalOpen(false)}

@@ -24,6 +24,7 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { copyToClipboard } from "../../../helpers/GetStaticData";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler.jsx";
 import { useAlertStore } from "../../../store/alert-store.js";
@@ -35,6 +36,7 @@ const { Text } = Typography;
 const MAX_BULK_DELETE = 100;
 
 const FileHistoryModal = ({ open, setOpen, workflowId, workflowName }) => {
+  const { t } = useTranslation();
   const [fileHistories, setFileHistories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -388,7 +390,7 @@ const FileHistoryModal = ({ open, setOpen, workflowId, workflowName }) => {
                 e.stopPropagation();
                 handleCopy(text, "File path");
               }}
-              title="Copy file path"
+              title={t("pipelines.copyFilePath")}
             />
           )}
         </Space>
@@ -415,7 +417,7 @@ const FileHistoryModal = ({ open, setOpen, workflowId, workflowName }) => {
     },
     {
       title: (
-        <Tooltip title="Number of times this file has been processed in this workflow">
+        <Tooltip title={t("pipelines.timesProcessed")}>
           <span>Total Attempts</span>
         </Tooltip>
       ),
@@ -468,7 +470,7 @@ const FileHistoryModal = ({ open, setOpen, workflowId, workflowName }) => {
                 e.stopPropagation();
                 handleCopy(error, "Error message");
               }}
-              title="Copy error message"
+              title={t("pipelines.copyErrorMessage")}
             />
           </Space>
         ) : (
@@ -481,11 +483,11 @@ const FileHistoryModal = ({ open, setOpen, workflowId, workflowName }) => {
       width: "8%",
       render: (_, record) => (
         <Popconfirm
-          title="Delete this file history?"
-          description="This action cannot be undone."
+          title={t("pipelines.deleteFileHistory")}
+          description={t("pipelines.cannotBeUndone")}
           onConfirm={() => handleDeleteSingle(record.id)}
-          okText="Yes"
-          cancelText="No"
+          okText={t("pipelines.yes")}
+          cancelText={t("pipelines.no")}
         >
           <Button type="link" danger icon={<DeleteOutlined />} size="small">
             Delete
@@ -594,10 +596,10 @@ const FileHistoryModal = ({ open, setOpen, workflowId, workflowName }) => {
           <Space wrap>
             <Popconfirm
               title={`Delete ${selectedRowKeys.length} selected file histories?`}
-              description="This action cannot be undone."
+              description={t("pipelines.cannotBeUndone")}
               onConfirm={handleDeleteSelected}
-              okText="Yes"
-              cancelText="No"
+              okText={t("pipelines.yes")}
+              cancelText={t("pipelines.no")}
               disabled={selectedRowKeys.length === 0}
             >
               <Button

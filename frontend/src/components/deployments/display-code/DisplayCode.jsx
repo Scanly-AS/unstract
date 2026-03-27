@@ -3,11 +3,13 @@ import { Modal, Select, Tabs, Tooltip } from "antd";
 import Handlebars from "handlebars";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import CodeSnippet from "./CodeSnippet.jsx";
 import "./DisplayCode.css";
 
 const DisplayCode = ({ isDialogOpen, setDialogOpen, url }) => {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState("");
@@ -165,7 +167,7 @@ const DisplayCode = ({ isDialogOpen, setDialogOpen, url }) => {
 
   return (
     <Modal
-      title="Code Snippets"
+      title={t("deployments.codeSnippets")}
       centered
       maskClosable={false}
       open={isDialogOpen}
@@ -187,11 +189,11 @@ const DisplayCode = ({ isDialogOpen, setDialogOpen, url }) => {
             />
             <button className="copyCodeBtn" onClick={handleCopyClick}>
               {copied ? (
-                <Tooltip title="Copied">
+                <Tooltip title={t("deployments.copied")}>
                   <CheckCircleOutlined />
                 </Tooltip>
               ) : (
-                <Tooltip title="Copy snippet">
+                <Tooltip title={t("deployments.copySnippet")}>
                   <CopyOutlined />
                 </Tooltip>
               )}
