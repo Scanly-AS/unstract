@@ -388,7 +388,17 @@
     "alreadyIndexing": "This document is already getting indexed",
     "waitForRun": "Please wait for the run to complete",
     "createPromptStudio": "Create Prompt Studio",
-    "exportedNote": "Exported Tools are always shared with the Prompt Studio projects owner and users in addition to other users it is explicitly shared with"
+    "exportedNote": "Exported Tools are always shared with the Prompt Studio projects owner and users in addition to other users it is explicitly shared with",
+    "promptProject": "Prompt Project",
+    "promptStudio": "Prompt Studio",
+    "noLlmProfileSelected": "No LLM Profile Selected",
+    "noAdapterSelected": "No adapter selected",
+    "summarizationNotConfigured": "Summarization Not Configured",
+    "summarizationEnabled": "Summarization enabled",
+    "summarizationDisabled": "Summarization disabled",
+    "setDefaultLlmProfile": "Set the default LLM profile before uploading a document",
+    "uploadTheDocument": "Upload the document",
+    "uploadCancelled": "Upload cancelled by user"
   },
   "widgets": {
     "shareUsers": "Share Users",

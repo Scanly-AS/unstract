@@ -388,7 +388,17 @@
     "alreadyIndexing": "Dette dokumentet indekseres allerede",
     "waitForRun": "Vent til kjøringen er fullført",
     "createPromptStudio": "Opprett Prompt Studio",
-    "exportedNote": "Eksporterte verktøy deles alltid med Prompt Studio-prosjektets eier og brukere i tillegg til andre brukere det er eksplisitt delt med"
+    "exportedNote": "Eksporterte verktøy deles alltid med Prompt Studio-prosjektets eier og brukere i tillegg til andre brukere det er eksplisitt delt med",
+    "promptProject": "Prompt-prosjekt",
+    "promptStudio": "Prompt Studio",
+    "noLlmProfileSelected": "Ingen LLM-profil valgt",
+    "noAdapterSelected": "Ingen adapter valgt",
+    "summarizationNotConfigured": "Oppsummering ikke konfigurert",
+    "summarizationEnabled": "Oppsummering aktivert",
+    "summarizationDisabled": "Oppsummering deaktivert",
+    "setDefaultLlmProfile": "Sett standard LLM-profil før du laster opp et dokument",
+    "uploadTheDocument": "Last opp dokumentet",
+    "uploadCancelled": "Opplasting avbrutt av bruker"
   },
   "widgets": {
     "shareUsers": "Del med brukere",
