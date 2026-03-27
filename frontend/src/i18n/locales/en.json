@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "profile": "Profile",
+    "switchOrg": "Switch Org",
+    "customPlans": "Custom Plans",
+    "logout": "Logout",
+    "login": "Login",
+    "language": "Language",
+    "alreadyInOrg": "You are already in {{orgName}}",
+    "switchToOrg": "Want to switch to {{orgName}}?",
+    "onboardIncomplete": "Your setup process is incomplete. Now, that's a bummer!",
+    "completeOnboard": "Complete it to start using Unstract"
+  },
+  "sidebar": {
+    "build": "BUILD",
+    "manage": "MANAGE",
+    "settings": "SETTINGS",
+    "review": "REVIEW",
+    "promptStudio": "Prompt Studio",
+    "promptStudioDesc": "Create structured data from unstructured documents",
+    "agenticPromptStudio": "Agentic Prompt Studio",
+    "agenticPromptStudioDesc": "Build and manage AI-powered extraction workflows",
+    "workflows": "Workflows",
+    "workflowsDesc": "Build no-code data workflows for unstructured data",
+    "dashboard": "Dashboard",
+    "dashboardDesc": "View platform usage metrics and analytics",
+    "apiDeployments": "API Deployments",
+    "apiDeploymentsDesc": "Unstructured to structured APIs",
+    "etlPipelines": "ETL Pipelines",
+    "etlPipelinesDesc": "Unstructured to structured data pipelines",
+    "taskPipelines": "Task Pipelines",
+    "taskPipelinesDesc": "Ad-hoc unstructured data task pipelines",
+    "logs": "Logs",
+    "logsDesc": "Records system events for monitoring and debugging",
+    "llms": "LLMs",
+    "llmsDesc": "Setup platform wide access to Large Language Models",
+    "vectorDbs": "Vector DBs",
+    "vectorDbsDesc": "Setup platform wide access to Vector DBs",
+    "embedding": "Embedding",
+    "embeddingDesc": "Setup platform wide access to Embedding models",
+    "textExtractor": "Text Extractor",
+    "textExtractorDesc": "Setup platform wide access to Text extractor services",
+    "connectors": "Connectors",
+    "connectorsDesc": "Manage connectors for data sources and destinations",
+    "platform": "Platform",
+    "platformDesc": "Settings for the platform",
+    "pinSidebar": "Pin sidebar",
+    "unpinSidebar": "Unpin sidebar",
+    "hitl": "HITL",
+    "hitlDesc": "Human-in-the-loop document review"
+  },
+  "settingsMenu": {
+    "platformSettings": "Platform Settings",
+    "platformApiKeys": "Platform API Keys",
+    "userManagement": "User Management",
+    "defaultTriad": "Default Triad",
+    "hitlSettings": "Human In the Loop Settings"
+  },
+  "hitlMenu": {
+    "review": "Review",
+    "approve": "Approve",
+    "downloadSync": "Download & Sync"
+  },
+  "reviewHeader": {
+    "approve": "Approve",
+    "downloadAndSync": "Download and Sync Manager",
+    "review": "Review",
+    "simpleReview": "Simple Review"
+  },
+  "alerts": {
+    "close": "Close",
+    "closeAll": "Close All"
+  }
+}

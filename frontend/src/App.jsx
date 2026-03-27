@@ -1,6 +1,7 @@
 import { Button, ConfigProvider, notification, theme } from "antd";
 import { useEffect } from "react";
 import { HelmetProvider } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
 import { GenericLoader } from "./components/generic-loader/GenericLoader";
 import CustomMarkdown from "./components/helpers/custom-markdown/CustomMarkdown.jsx";
@@ -28,6 +29,7 @@ function App() {
   const { sessionDetails, isLogoutLoading } = useSessionStore();
   const { alertDetails } = useAlertStore();
   const { pushLogMessages } = useSocketLogsStore();
+  const { t } = useTranslation();
 
   const btn = (
     <>
@@ -36,14 +38,14 @@ function App() {
         size="small"
         onClick={() => notificationAPI.destroy(alertDetails?.key)}
       >
-        Close
+        {t("alerts.close")}
       </Button>
       <Button
         type="link"
         size="small"
         onClick={() => notificationAPI.destroy()}
       >
-        Close All
+        {t("alerts.closeAll")}
       </Button>
     </>
   );

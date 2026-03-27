@@ -16,6 +16,7 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import apiDeploy from "../../../assets/api-deployments.svg";
 import ConnectorsIcon from "../../../assets/connectors.svg";
@@ -97,36 +98,36 @@ try {
   // Plugin unavailable
 }
 
-const getSettingsMenuItems = (orgName, isAdmin) => [
+const getSettingsMenuItems = (orgName, isAdmin, t) => [
   {
     key: "platform",
-    label: "Platform Settings",
+    label: t("settingsMenu.platformSettings"),
     path: `/${orgName}/settings/platform`,
   },
   ...(isAdmin
     ? [
         {
           key: "platformApiKeys",
-          label: "Platform API Keys",
+          label: t("settingsMenu.platformApiKeys"),
           path: `/${orgName}/settings/platform-api-keys`,
         },
       ]
     : []),
   {
     key: "users",
-    label: "User Management",
+    label: t("settingsMenu.userManagement"),
     path: `/${orgName}/users`,
   },
   {
     key: "triad",
-    label: "Default Triad",
+    label: t("settingsMenu.defaultTriad"),
     path: `/${orgName}/settings/triad`,
   },
   ...(manualReviewSettingsEnabled
     ? [
         {
           key: "review",
-          label: "Human In the Loop Settings",
+          label: t("settingsMenu.hitlSettings"),
           path: `/${orgName}/settings/review`,
         },
       ]
@@ -153,8 +154,8 @@ const getActiveSettingsKey = () => {
   return "platform";
 };
 
-const SettingsPopoverContent = ({ orgName, navigate, isAdmin }) => {
-  const settingsMenuItems = getSettingsMenuItems(orgName, isAdmin);
+const SettingsPopoverContent = ({ orgName, navigate, isAdmin, t }) => {
+  const settingsMenuItems = getSettingsMenuItems(orgName, isAdmin, t);
   const currentActiveKey = getActiveSettingsKey();
 
   const handleMenuClick = (path) => {
@@ -183,34 +184,35 @@ SettingsPopoverContent.propTypes = {
   orgName: PropTypes.string.isRequired,
   navigate: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool,
+  t: PropTypes.func.isRequired,
 };
 
-const HITL_MENU_ITEMS = [
-  { key: "review", label: "Review", subPath: "/review" },
+const HITL_MENU_KEYS = [
+  { key: "review", labelKey: "hitlMenu.review", subPath: "/review" },
   {
     key: "approve",
-    label: "Approve",
+    labelKey: "hitlMenu.approve",
     subPath: "/review/approve",
     supervisorOnly: true,
   },
   {
     key: "download",
-    label: "Download & Sync",
+    labelKey: "hitlMenu.downloadSync",
     subPath: "/review/download_and_sync",
     supervisorOnly: true,
   },
 ];
 
-const getHITLMenuItems = (orgName, role) => {
+const getHITLMenuItems = (orgName, role, t) => {
   const isSupervisorOrAdmin = [
     "unstract_supervisor",
     "unstract_admin",
   ].includes(role);
-  return HITL_MENU_ITEMS.filter(
+  return HITL_MENU_KEYS.filter(
     (item) => !item.supervisorOnly || isSupervisorOrAdmin,
   ).map((item) => ({
     key: item.key,
-    label: item.label,
+    label: t(item.labelKey),
     path: `/${orgName}${item.subPath}`,
   }));
 };
@@ -230,8 +232,8 @@ const getActiveHITLKey = (orgName) => {
   return "review";
 };
 
-const HITLPopoverContent = ({ orgName, role, navigate }) => {
-  const hitlMenuItems = getHITLMenuItems(orgName, role);
+const HITLPopoverContent = ({ orgName, role, navigate, t }) => {
+  const hitlMenuItems = getHITLMenuItems(orgName, role, t);
   const currentActiveKey = getActiveHITLKey(orgName);
 
   return (
@@ -256,10 +258,12 @@ HITLPopoverContent.propTypes = {
   orgName: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
   navigate: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 const SideNavBar = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { sessionDetails } = useSessionStore();
   const { orgName, flags, role } = sessionDetails;
 
@@ -330,20 +334,20 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
   const unstractMenuItems = [
     {
       id: 1,
-      mainTitle: "BUILD",
+      mainTitle: t("sidebar.build"),
       subMenu: [
         {
           id: 1.1,
-          title: "Prompt Studio",
-          description: "Create structured data from unstructured documents",
+          title: t("sidebar.promptStudio"),
+          description: t("sidebar.promptStudioDesc"),
           image: CustomTools,
           path: `/${orgName}/tools`,
           active: globalThis.location.pathname.startsWith(`/${orgName}/tools`),
         },
         {
           id: 1.3,
-          title: "Workflows",
-          description: "Build no-code data workflows for unstructured data",
+          title: t("sidebar.workflows"),
+          description: t("sidebar.workflowsDesc"),
           icon: BranchesOutlined,
           image: Workflows,
           path: `/${orgName}/workflows`,
@@ -355,36 +359,36 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
     },
     {
       id: 2,
-      mainTitle: "MANAGE",
+      mainTitle: t("sidebar.manage"),
       subMenu: [
         {
           id: 2.2,
-          title: "API Deployments",
-          description: "Unstructured to structured APIs",
+          title: t("sidebar.apiDeployments"),
+          description: t("sidebar.apiDeploymentsDesc"),
           image: apiDeploy,
           path: `/${orgName}/api`,
           active: globalThis.location.pathname.startsWith(`/${orgName}/api`),
         },
         {
           id: 2.3,
-          title: "ETL Pipelines",
-          description: "Unstructured to structured data pipelines",
+          title: t("sidebar.etlPipelines"),
+          description: t("sidebar.etlPipelinesDesc"),
           image: etl,
           path: `/${orgName}/etl`,
           active: globalThis.location.pathname.startsWith(`/${orgName}/etl`),
         },
         {
           id: 2.4,
-          title: "Task Pipelines",
-          description: "Ad-hoc unstructured data task pipelines",
+          title: t("sidebar.taskPipelines"),
+          description: t("sidebar.taskPipelinesDesc"),
           image: task,
           path: `/${orgName}/task`,
           active: globalThis.location.pathname.startsWith(`/${orgName}/task`),
         },
         {
           id: 1.5,
-          title: "Logs",
-          description: "Records system events for monitoring and debugging",
+          title: t("sidebar.logs"),
+          description: t("sidebar.logsDesc"),
           image: TerminalIcon,
           path: `/${orgName}/logs`,
           active: globalThis.location.pathname.startsWith(`/${orgName}/logs`),
@@ -393,12 +397,12 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
     },
     {
       id: 3,
-      mainTitle: "SETTINGS",
+      mainTitle: t("sidebar.settings"),
       subMenu: [
         {
           id: 3.1,
-          title: "LLMs",
-          description: "Setup platform wide access to Large Language Models",
+          title: t("sidebar.llms"),
+          description: t("sidebar.llmsDesc"),
           icon: BranchesOutlined,
           image: LlmIcon,
           path: `/${orgName}/settings/llms`,
@@ -408,8 +412,8 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
         },
         {
           id: 3.2,
-          title: "Vector DBs",
-          description: "Setup platform wide access to Vector DBs",
+          title: t("sidebar.vectorDbs"),
+          description: t("sidebar.vectorDbsDesc"),
           image: VectorDbIcon,
           path: `/${orgName}/settings/vectorDbs`,
           active: globalThis.location.pathname.startsWith(
@@ -418,8 +422,8 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
         },
         {
           id: 3.3,
-          title: "Embedding",
-          description: "Setup platform wide access to Embedding models",
+          title: t("sidebar.embedding"),
+          description: t("sidebar.embeddingDesc"),
           image: EmbeddingIcon,
           path: `/${orgName}/settings/embedding`,
           active: globalThis.location.pathname.startsWith(
@@ -428,8 +432,8 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
         },
         {
           id: 3.4,
-          title: "Text Extractor",
-          description: "Setup platform wide access to Text extractor services",
+          title: t("sidebar.textExtractor"),
+          description: t("sidebar.textExtractorDesc"),
           image: TextExtractorIcon,
           path: `/${orgName}/settings/textExtractor`,
           active: globalThis.location.pathname.startsWith(
@@ -438,8 +442,8 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
         },
         {
           id: 3.5,
-          title: "Connectors",
-          description: "Manage connectors for data sources and destinations",
+          title: t("sidebar.connectors"),
+          description: t("sidebar.connectorsDesc"),
           image: ConnectorsIcon,
           path: `/${orgName}/settings/connectors`,
           active: globalThis.location.pathname.startsWith(
@@ -448,8 +452,8 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
         },
         {
           id: 3.6,
-          title: "Platform",
-          description: "Settings for the platform",
+          title: t("sidebar.platform"),
+          description: t("sidebar.platformDesc"),
           image: PlatformSettingsIcon,
           path: `/${orgName}/settings/platform`,
           active:
@@ -468,8 +472,8 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
   // Dashboard menu item (available for both OSS and cloud)
   unstractMenuItems[1].subMenu.unshift({
     id: 2.0,
-    title: "Dashboard",
-    description: "View platform usage metrics and analytics",
+    title: t("sidebar.dashboard"),
+    description: t("sidebar.dashboardDesc"),
     image: DashboardIcon,
     path: `/${orgName}/dashboard`,
     active: globalThis.location.pathname.startsWith(`/${orgName}/dashboard`),
@@ -495,8 +499,8 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
   if (agenticPromptStudioEnabled && isUnstract) {
     data[0]?.subMenu?.splice(1, 0, {
       id: 1.2,
-      title: "Agentic Prompt Studio",
-      description: "Build and manage AI-powered extraction workflows",
+      title: t("sidebar.agenticPromptStudio"),
+      description: t("sidebar.agenticPromptStudioDesc"),
       image: CustomTools,
       path: `/${orgName}/agentic-prompt-studio`,
       active: globalThis.location.pathname.startsWith(
@@ -513,19 +517,23 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
     "unstract_admin",
   ].includes(role);
   if (manualReviewSettingsEnabled && isHITLRole && isUnstract) {
-    const hasReviewSection = data.some((item) => item.mainTitle === "REVIEW");
+    const reviewTitle = t("sidebar.review");
+    const hasReviewSection = data.some(
+      (item) => item.mainTitle === reviewTitle,
+    );
+    const settingsTitle = t("sidebar.settings");
     const settingsIndex = data.findIndex(
-      (item) => item.mainTitle === "SETTINGS",
+      (item) => item.mainTitle === settingsTitle,
     );
     if (!hasReviewSection && settingsIndex !== -1) {
       data.splice(settingsIndex, 0, {
         id: 2.5,
-        mainTitle: "REVIEW",
+        mainTitle: reviewTitle,
         subMenu: [
           {
             id: 2.51,
-            title: "HITL",
-            description: "Human-in-the-loop document review",
+            title: t("sidebar.hitl"),
+            description: t("sidebar.hitlDesc"),
             isHITL: true,
             path: `/${orgName}/review`,
             active: globalThis.location.pathname.startsWith(
@@ -624,6 +632,7 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
                               orgName={orgName}
                               role={role}
                               navigate={navigate}
+                              t={t}
                             />
                           }
                           trigger="hover"
@@ -688,6 +697,7 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
                               orgName={orgName}
                               navigate={navigate}
                               isAdmin={sessionDetails?.isAdmin}
+                              t={t}
                             />
                           }
                           trigger="hover"
@@ -758,7 +768,9 @@ const SideNavBar = ({ collapsed, setCollapsed }) => {
           className="sidebar-toggle-container"
           onClick={togglePin}
           aria-pressed={isPinned}
-          aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar"}
+          aria-label={
+            isPinned ? t("sidebar.unpinSidebar") : t("sidebar.pinSidebar")
+          }
           icon={
             <DoubleRightOutlined
               className={`sidebar-toggle-icon${isPinned ? " pinned" : ""}`}

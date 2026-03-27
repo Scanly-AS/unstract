@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "profile": "Profil",
+    "switchOrg": "Bytt organisasjon",
+    "customPlans": "Egendefinerte planer",
+    "logout": "Logg ut",
+    "login": "Logg inn",
+    "language": "Språk",
+    "alreadyInOrg": "Du er allerede i {{orgName}}",
+    "switchToOrg": "Vil du bytte til {{orgName}}?",
+    "onboardIncomplete": "Oppsettet ditt er ikke fullført. Det er kjedelig!",
+    "completeOnboard": "Fullfør det for å begynne å bruke Unstract"
+  },
+  "sidebar": {
+    "build": "BYGG",
+    "manage": "ADMINISTRER",
+    "settings": "INNSTILLINGER",
+    "review": "GJENNOMGANG",
+    "promptStudio": "Prompt Studio",
+    "promptStudioDesc": "Opprett strukturerte data fra ustrukturerte dokumenter",
+    "agenticPromptStudio": "Agentisk Prompt Studio",
+    "agenticPromptStudioDesc": "Bygg og administrer AI-drevne uttrekkingsarbeidsflyter",
+    "workflows": "Arbeidsflyter",
+    "workflowsDesc": "Bygg no-code-arbeidsflyter for ustrukturerte data",
+    "dashboard": "Dashbord",
+    "dashboardDesc": "Se plattformbruk og analyser",
+    "apiDeployments": "API-distribusjoner",
+    "apiDeploymentsDesc": "Ustrukturert til strukturert API-er",
+    "etlPipelines": "ETL-rørledninger",
+    "etlPipelinesDesc": "Ustrukturert til strukturert datarørledninger",
+    "taskPipelines": "Oppgaverørledninger",
+    "taskPipelinesDesc": "Ad-hoc ustrukturert dataoppgaverørledninger",
+    "logs": "Logger",
+    "logsDesc": "Registrerer systemhendelser for overvåking og feilsøking",
+    "llms": "LLM-er",
+    "llmsDesc": "Sett opp plattformtilgang til store språkmodeller",
+    "vectorDbs": "Vektordatabaser",
+    "vectorDbsDesc": "Sett opp plattformtilgang til vektordatabaser",
+    "embedding": "Innbygging",
+    "embeddingDesc": "Sett opp plattformtilgang til innbyggingsmodeller",
+    "textExtractor": "Tekstuttrekker",
+    "textExtractorDesc": "Sett opp plattformtilgang til tekstuttrekkertjenester",
+    "connectors": "Koblinger",
+    "connectorsDesc": "Administrer koblinger for datakilder og destinasjoner",
+    "platform": "Plattform",
+    "platformDesc": "Innstillinger for plattformen",
+    "pinSidebar": "Fest sidefeltet",
+    "unpinSidebar": "Løsne sidefeltet",
+    "hitl": "HITL",
+    "hitlDesc": "Menneskelig gjennomgang av dokumenter"
+  },
+  "settingsMenu": {
+    "platformSettings": "Plattforminnstillinger",
+    "platformApiKeys": "Plattform-API-nøkler",
+    "userManagement": "Brukeradministrasjon",
+    "defaultTriad": "Standard triade",
+    "hitlSettings": "Menneske-i-løkken-innstillinger"
+  },
+  "hitlMenu": {
+    "review": "Gjennomgang",
+    "approve": "Godkjenn",
+    "downloadSync": "Last ned og synkroniser"
+  },
+  "reviewHeader": {
+    "approve": "Godkjenn",
+    "downloadAndSync": "Nedlasting og synkroniseringsbehandler",
+    "review": "Gjennomgang",
+    "simpleReview": "Enkel gjennomgang"
+  },
+  "alerts": {
+    "close": "Lukk",
+    "closeAll": "Lukk alle"
+  }
+}

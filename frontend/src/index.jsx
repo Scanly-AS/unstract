@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import { GenericLoader } from "./components/generic-loader/GenericLoader";
 import { LazyLoader } from "./components/widgets/lazy-loader/LazyLoader.jsx";
 import { SocketProvider } from "./helpers/SocketContext.js";
+import "./i18n/i18n.js";
 import "./index.css";
 import config from "./config.js";
 
