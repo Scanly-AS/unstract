@@ -1,5 +1,6 @@
 import { Button, Modal } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { useSessionStore } from "../../store/session-store";
@@ -8,6 +9,7 @@ import "./PromptStudioModal.css";
 export function PromptStudioModal({ onClose, showModal }) {
   const navigate = useNavigate();
   const { sessionDetails } = useSessionStore();
+  const { t } = useTranslation();
 
   const handleClose = () => {
     if (onClose) onClose();
@@ -20,7 +22,7 @@ export function PromptStudioModal({ onClose, showModal }) {
 
   return (
     <Modal
-      title="Create Prompt Studio"
+      title={t("customTools.createPromptStudio")}
       open={showModal}
       onCancel={handleClose}
       footer={null}
@@ -40,7 +42,7 @@ export function PromptStudioModal({ onClose, showModal }) {
           onClick={handleCreateClick}
           className="prompt-studio-guide-btn"
         >
-          + Create Prompt Studio
+          + {t("customTools.createPromptStudio")}
         </Button>
         <Button
           type="link"

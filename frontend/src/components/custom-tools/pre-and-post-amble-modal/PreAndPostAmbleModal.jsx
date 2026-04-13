@@ -2,6 +2,7 @@ import { ExpandOutlined } from "@ant-design/icons";
 import { Button, Input, Modal, Space, Typography } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./PreAndPostAmbleModal.css";
 
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
@@ -28,6 +29,7 @@ function PreAndPostAmbleModal({ type, handleUpdateTool }) {
   const { details, updateCustomTool, isPublicSource } = useCustomToolStore();
   const { setAlertDetails } = useAlertStore();
   const handleException = useExceptionHandler();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (type === fieldNames.preamble) {
@@ -105,7 +107,9 @@ function PreAndPostAmbleModal({ type, handleUpdateTool }) {
         </div>
         <div>
           <div className="text-area-header">
-            <Typography.Text>Add {title}</Typography.Text>
+            <Typography.Text>
+              {t("customTools.addTitle", { title })}
+            </Typography.Text>
           </div>
         </div>
         <div className="text-area-container">
@@ -124,7 +128,7 @@ function PreAndPostAmbleModal({ type, handleUpdateTool }) {
               onClick={toggleExpandModal}
               type="text"
               disabled={isPublicSource}
-              title="Expand view"
+              title={t("customTools.expandView")}
             />
           </div>
           <Button

@@ -1,6 +1,7 @@
 import { TableOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Tabs, Tooltip } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { getSequenceNumber, promptType } from "../../../helpers/GetStaticData";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
@@ -35,12 +36,13 @@ function ToolsMain() {
   const handleException = useExceptionHandler();
   const { setPostHogCustomEvent } = usePostHogEvents();
   const { promptOutputApi, updatePromptOutputState } = usePromptOutput();
+  const { t } = useTranslation();
 
   const items = [
     {
       key: "1",
       label: isSimplePromptStudio ? (
-        <Tooltip title="Fields">
+        <Tooltip title={t("customTools.fields")}>
           <UnorderedListOutlined />
         </Tooltip>
       ) : (
@@ -50,11 +52,11 @@ function ToolsMain() {
     {
       key: "2",
       label: isSimplePromptStudio ? (
-        <Tooltip title="Combined Output">
+        <Tooltip title={t("customTools.combinedOutput")}>
           <TableOutlined />
         </Tooltip>
       ) : (
-        "Combined Output"
+        t("customTools.combinedOutput")
       ),
       disabled: prompts?.length === 0 || isMultiPassExtractLoading,
     },

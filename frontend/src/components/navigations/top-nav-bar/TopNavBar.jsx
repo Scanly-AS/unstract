@@ -1,4 +1,5 @@
 import {
+  GlobalOutlined,
   LoginOutlined,
   LogoutOutlined,
   SettingOutlined,
@@ -18,8 +19,8 @@ import {
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { UnstractLogo } from "../../../assets/index.js";
 import {
   getBaseUrl,
@@ -27,6 +28,7 @@ import {
   onboardCompleted,
 } from "../../../helpers/GetStaticData.js";
 import useLogout from "../../../hooks/useLogout.js";
+import { changeLanguage, LANGUAGES } from "../../../i18n/i18n.js";
 import "../../../layouts/page-layout/PageLayout.css";
 import { useSessionStore } from "../../../store/session-store.js";
 import "./TopNavBar.css";
@@ -132,6 +134,7 @@ try {
 
 function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const { sessionDetails } = useSessionStore();
   const { orgName, allOrganization, orgId, isLoggedIn } = sessionDetails;
   const baseUrl = getBaseUrl();
@@ -196,19 +199,19 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
     const pathSegments = location.pathname.split("review");
     if (pathSegments.length > 1) {
       if (pathSegments[1].includes("/approve")) {
-        setReviewPageHeader("Approve");
+        setReviewPageHeader(t("reviewHeader.approve"));
       } else if (pathSegments[1].includes("/download_and_sync")) {
-        setReviewPageHeader("Download and Sync Manager");
+        setReviewPageHeader(t("reviewHeader.downloadAndSync"));
       } else {
-        setReviewPageHeader("Review");
+        setReviewPageHeader(t("reviewHeader.review"));
       }
     } else {
       setReviewPageHeader(null);
     }
     if (location.pathname.includes("/simple_review")) {
-      setReviewPageHeader("Simple Review");
+      setReviewPageHeader(t("reviewHeader.simpleReview"));
     }
-  }, [location]);
+  }, [location, t]);
 
   // Switch organization
   const handleContinue = useCallback(async (selectedOrg) => {
@@ -239,7 +242,9 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
               onClick={() =>
                 setAlertDetails({
                   type: "error",
-                  content: `You are already in ${org?.display_name}`,
+                  content: t("nav.alreadyInOrg", {
+                    orgName: org?.display_name,
+                  }),
                 })
               }
             >
@@ -248,14 +253,33 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
           ) : (
             <ConfirmModal
               handleConfirm={() => handleContinue(org?.id)}
-              content={`Want to switch to ${org?.display_name}?`}
+              content={t("nav.switchToOrg", {
+                orgName: org?.display_name,
+              })}
             >
               <div>{org?.display_name}</div>
             </ConfirmModal>
           ),
       };
     });
-  }, [allOrganization, handleContinue]);
+  }, [allOrganization, handleContinue, t]);
+
+  // Language sub-menu items
+  const languageMenuItems = useMemo(() => {
+    return LANGUAGES.map((lang) => ({
+      key: lang.code,
+      label: (
+        <div
+          onClick={() => changeLanguage(lang.code)}
+          style={{
+            fontWeight: i18n.language === lang.code ? "bold" : "normal",
+          }}
+        >
+          {lang.label}
+        </div>
+      ),
+    }));
+  }, [i18n.language]);
 
   // Build dropdown menu items
   const items = useMemo(() => {
@@ -267,7 +291,7 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
 
     const handleClick = isLoggedIn ? logout : handleLogin;
     const icon = isLoggedIn ? <LogoutOutlined /> : <LoginOutlined />;
-    const label = isLoggedIn ? "Logout" : "Login";
+    const label = isLoggedIn ? t("nav.logout") : t("nav.login");
 
     return [
       // Profile
@@ -281,7 +305,7 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
               disabled={shouldDisableRouting}
               type="text"
             >
-              <UserOutlined /> Profile
+              <UserOutlined /> {t("nav.profile")}
             </Button>
           ),
         },
@@ -300,7 +324,27 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
             placement="left"
           >
             <div className="ant-dropdown-trigger">
-              <UserSwitchOutlined /> Switch Org
+              <UserSwitchOutlined /> {t("nav.switchOrg")}
+            </div>
+          </Dropdown>
+        ),
+      },
+      // Language toggle
+      {
+        key: "9",
+        label: (
+          <Dropdown
+            menu={{
+              items: languageMenuItems,
+              selectable: true,
+              selectedKeys: [i18n.language],
+            }}
+            placement="left"
+          >
+            <div className="ant-dropdown-trigger">
+              <GlobalOutlined />{" "}
+              {LANGUAGES.find((l) => l.code === i18n.language)?.label ||
+                "Norsk"}
             </div>
           </Dropdown>
         ),
@@ -324,7 +368,7 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
               className="logout-button"
               type="text"
             >
-              <SettingOutlined /> Custom Plans
+              <SettingOutlined /> {t("nav.customPlans")}
             </Button>
           ),
         },
@@ -351,6 +395,9 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
     orgName,
     orgId,
     shouldDisableRouting,
+    t,
+    i18n.language,
+    languageMenuItems,
   ]);
 
   // Function to get the initials from the user name
@@ -396,10 +443,10 @@ function TopNavBar({ isSimpleLayout, topNavBarOptions }) {
               message={
                 <>
                   <span className="top-nav-alert-msg">
-                    Your setup process is incomplete. Now, that&apos;s a bummer!
+                    {t("nav.onboardIncomplete")}
                   </span>
                   <a href={onBoardUrl} className="top-nav-alert-link">
-                    Complete it to start using Unstract
+                    {t("nav.completeOnboard")}
                   </a>
                 </>
               }

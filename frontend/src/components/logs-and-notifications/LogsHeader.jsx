@@ -2,6 +2,7 @@ import { CloseOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
 import { Button, Space, Tag, Typography } from "antd";
 import PropTypes from "prop-types";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 
 export const LogsHeader = memo(function LogsHeader({
   isMinimized,
@@ -10,6 +11,7 @@ export const LogsHeader = memo(function LogsHeader({
   onToggleExpand,
   onMinimize,
 }) {
+  const { t } = useTranslation();
   const expandCollapseIcon = isFull ? <DownOutlined /> : <UpOutlined />;
 
   const minimizeIcon = <CloseOutlined />;
@@ -17,7 +19,7 @@ export const LogsHeader = memo(function LogsHeader({
   return (
     <div className="logs-header-container">
       <Space>
-        <Typography.Text>Logs</Typography.Text>
+        <Typography.Text>{t("logging.logs")}</Typography.Text>
         {isMinimized && errorCount > 0 && <Tag color="red">{errorCount}</Tag>}
       </Space>
       <Space>

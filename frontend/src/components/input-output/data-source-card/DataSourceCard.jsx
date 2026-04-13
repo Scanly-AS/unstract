@@ -1,10 +1,12 @@
 import { Card, Image, Typography } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 import "./DataSourceCard.css";
 import usePostHogEvents from "../../../hooks/usePostHogEvents";
 
 function DataSourceCard({ srcDetails, setSelectedSourceId, type }) {
+  const { t } = useTranslation();
   const { posthogEventText, setPostHogCustomEvent } = usePostHogEvents();
 
   const handleSelectSource = () => {
@@ -35,7 +37,7 @@ function DataSourceCard({ srcDetails, setSelectedSourceId, type }) {
       <div className="cover-container">
         {srcDetails?.isDisabled && (
           <div className="disabled-overlay">
-            <Typography.Text strong>Coming Soon</Typography.Text>
+            <Typography.Text strong>{t("widgets.comingSoon")}</Typography.Text>
           </div>
         )}
         <div className="cover-img">

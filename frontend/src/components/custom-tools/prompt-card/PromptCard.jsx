@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { memo, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   PROMPT_RUN_API_STATUSES,
@@ -56,6 +57,7 @@ const PromptCard = memo(
     const { messages } = useSocketCustomToolStore();
     const { setAlertDetails } = useAlertStore();
     const { setPostHogCustomEvent } = usePostHogEvents();
+    const { t } = useTranslation();
 
     useEffect(() => {
       if (
@@ -263,7 +265,7 @@ const PromptCard = memo(
         if (!selectedDoc) {
           setAlertDetails({
             type: "error",
-            content: "Document not selected",
+            content: t("customTools.documentNotSelected"),
           });
           return true;
         }
@@ -271,7 +273,7 @@ const PromptCard = memo(
         if (!promptKey) {
           setAlertDetails({
             type: "error",
-            content: "Prompt key cannot be empty",
+            content: t("customTools.promptKeyEmpty"),
           });
           return true;
         }
@@ -279,7 +281,7 @@ const PromptCard = memo(
         if (!promptText) {
           setAlertDetails({
             type: "error",
-            content: "Prompt cannot be empty",
+            content: t("customTools.promptEmpty"),
           });
           return true;
         }

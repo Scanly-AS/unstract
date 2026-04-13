@@ -18,6 +18,7 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
@@ -112,13 +113,14 @@ function ManageDocsModal({
   const handleException = useExceptionHandler();
   const { setPostHogCustomEvent } = usePostHogEvents();
   const { promptOutputs, updatePromptOutput } = usePromptOutputStore();
+  const { t } = useTranslation();
 
   const successIndex = (
     <Typography.Text>
       <span style={{ marginRight: "8px" }}>
         <CheckCircleFilled style={{ color: "#52C41A" }} />
       </span>{" "}
-      Indexed
+      {t("customTools.indexed")}
     </Typography.Text>
   );
 
@@ -127,7 +129,7 @@ function ManageDocsModal({
       <span style={{ marginRight: "8px" }}>
         <CloseCircleFilled style={{ color: "#FF4D4F" }} />
       </span>{" "}
-      Not Indexed
+      {t("customTools.notIndexed")}
     </Typography.Text>
   );
 
@@ -159,7 +161,7 @@ function ManageDocsModal({
       <span style={{ marginRight: "8px" }}>
         <CloseCircleFilled style={{ color: "#FF4D4F" }} />
       </span>{" "}
-      Not Summarized
+      {t("customTools.notSummarized")}
     </Typography.Text>
   );
 
@@ -314,7 +316,9 @@ function ManageDocsModal({
         handleIndexStatus(indexType, indexStatus);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to get index status"));
+        setAlertDetails(
+          handleException(err, t("customTools.failedToGetIndexStatus")),
+        );
       })
       .finally(() => {
         handleLoading(indexType, false);
@@ -326,7 +330,9 @@ function ManageDocsModal({
       (item) => item?.profile_id === llmProfile,
     );
 
-    return llmProfileName?.profile_name || "No LLM Profile Selected";
+    return (
+      llmProfileName?.profile_name || t("customTools.noLlmProfileSelected")
+    );
   };
 
   const isSummarizationConfigured = () =>
@@ -347,7 +353,11 @@ function ManageDocsModal({
           item?.adapter_id === selectedAdapterId ||
           item?.id === selectedAdapterId,
       );
-      return adapter?.adapter_name || adapter?.name || "No adapter selected";
+      return (
+        adapter?.adapter_name ||
+        adapter?.name ||
+        t("customTools.noAdapterSelected")
+      );
     }
 
     // Fall back to profile approach
@@ -355,19 +365,19 @@ function ManageDocsModal({
       return getLlmProfileName(summarizeLlmProfile);
     }
 
-    return "Summarization Not Configured";
+    return t("customTools.summarizationNotConfigured");
   };
 
   const columns = [
     {
-      title: "Document Variants",
+      title: t("customTools.documentVariants"),
       dataIndex: "document",
       key: "document",
     },
     {
       title: (
         <Space className="w-100">
-          <Typography.Text>Raw View</Typography.Text>
+          <Typography.Text>{t("customTools.rawView")}</Typography.Text>
           <Typography.Text type="secondary">
             {"(" + getLlmProfileName(rawLlmProfile) + ")"}
           </Typography.Text>
@@ -379,7 +389,7 @@ function ManageDocsModal({
       width: 300,
     },
     {
-      title: "Actions",
+      title: t("common.actions"),
       dataIndex: "reindex",
       key: "reindex",
       width: 200,
@@ -402,7 +412,7 @@ function ManageDocsModal({
     columns.splice(2, 0, {
       title: (
         <Space className="w-100">
-          <Typography.Text>Summary View</Typography.Text>
+          <Typography.Text>{t("customTools.summaryView")}</Typography.Text>
           <Typography.Text type="secondary">
             {"(" + getSummarizeLlmDisplayName() + ")"}
           </Typography.Text>
@@ -411,8 +421,8 @@ function ManageDocsModal({
             <Tooltip
               title={
                 isSummarizationEnabled()
-                  ? "Summarization enabled"
-                  : "Summarization disabled"
+                  ? t("customTools.summarizationEnabled")
+                  : t("customTools.summarizationDisabled")
               }
             >
               <span
@@ -423,8 +433,8 @@ function ManageDocsModal({
                 }`}
                 aria-label={
                   isSummarizationEnabled()
-                    ? "Summarization enabled"
-                    : "Summarization disabled"
+                    ? t("customTools.summarizationEnabled")
+                    : t("customTools.summarizationDisabled")
                 }
               />
             </Tooltip>
@@ -479,7 +489,7 @@ function ManageDocsModal({
               {indexDocs.includes(item?.document_id) ? (
                 <SpinnerLoader />
               ) : (
-                <Tooltip title="Index">
+                <Tooltip title={t("customTools.index")}>
                   <Button
                     size="small"
                     icon={<ReloadOutlined />}
@@ -504,9 +514,9 @@ function ManageDocsModal({
         delete: (
           <ConfirmModal
             handleConfirm={() => handleDelete(item?.document_id)}
-            content="The document will be permanently deleted."
+            content={t("customTools.documentDeleteConfirm")}
           >
-            <Tooltip title="Delete">
+            <Tooltip title={t("common.delete")}>
               <Button
                 size="small"
                 className="display-flex-align-center"
@@ -589,9 +599,9 @@ function ManageDocsModal({
         if (fileAlreadyExists) {
           setAlertDetails({
             type: "error",
-            content: "File name already exists",
+            content: t("customTools.fileNameExists"),
           });
-          reject(new Error("File name already exists"));
+          reject(new Error(t("customTools.fileNameExists")));
           return; // Stop further execution
         }
 
@@ -610,7 +620,7 @@ function ManageDocsModal({
           if (!ConfirmMultiDoc) {
             setAlertDetails({
               type: "error",
-              content: "Only PDF files are allowed",
+              content: t("customTools.onlyPDFAllowed"),
             });
           }
           setFileToUpload(file); // Store the file to be uploaded
@@ -635,7 +645,7 @@ function ManageDocsModal({
   const handleModalCancel = () => {
     if (rejectUpload) {
       setIsModalVisible(false); // Close the modal without uploading
-      rejectUpload(new Error("Upload cancelled by user")); // Reject the promise and stop the upload
+      rejectUpload(new Error(t("customTools.uploadCancelled"))); // Reject the promise and stop the upload
     }
   };
 
@@ -648,7 +658,7 @@ function ManageDocsModal({
       setIsUploading(false);
       setAlertDetails({
         type: "success",
-        content: "File uploaded successfully",
+        content: t("customTools.fileUploaded"),
       });
 
       const data = info.file.response?.data;
@@ -671,7 +681,9 @@ function ManageDocsModal({
       setIsUploading(false);
       setAlertDetails({
         type: "error",
-        content: info?.file?.response?.errors[0]?.detail || "Failed to Upload",
+        content:
+          info?.file?.response?.errors[0]?.detail ||
+          t("customTools.failedToUpload"),
       });
     }
   };
@@ -710,7 +722,7 @@ function ManageDocsModal({
         updatePromptOutput(updatedPromptOutput);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to delete"));
+        setAlertDetails(handleException(err, t("customTools.failedToDelete")));
       });
   };
 
@@ -754,7 +766,7 @@ function ManageDocsModal({
           <SpaceWrapper>
             <Space>
               <Typography.Text className="add-cus-tool-header">
-                Manage Document Variants
+                {t("customTools.manageDocuments")}
               </Typography.Text>
             </Space>
             <div>
@@ -771,8 +783,7 @@ function ManageDocsModal({
               >
                 <Tooltip
                   title={
-                    !defaultLlmProfile &&
-                    "Set the default LLM profile before uploading a document"
+                    !defaultLlmProfile && t("customTools.setDefaultLlmProfile")
                   }
                 >
                   <Button
@@ -785,7 +796,7 @@ function ManageDocsModal({
                       isPublicSource
                     }
                   >
-                    Click or drag file to this area to upload
+                    {t("customTools.clickOrDrag")}
                   </Button>
                 </Tooltip>
               </Upload.Dragger>
@@ -793,10 +804,12 @@ function ManageDocsModal({
             <Divider className="manage-docs-div" />
             <SpaceWrapper>
               <div>
-                <Typography.Text strong>Uploaded files</Typography.Text>
+                <Typography.Text strong>
+                  {t("customTools.uploadedFiles")}
+                </Typography.Text>
               </div>
               {!listOfDocs || listOfDocs?.length === 0 ? (
-                <EmptyState text="Upload the document" />
+                <EmptyState text={t("customTools.uploadTheDocument")} />
               ) : (
                 <div>
                   <Table
@@ -830,4 +843,5 @@ ManageDocsModal.propTypes = {
   handleUpdateTool: PropTypes.func.isRequired,
   handleDocChange: PropTypes.func.isRequired,
 };
+
 export { ManageDocsModal };

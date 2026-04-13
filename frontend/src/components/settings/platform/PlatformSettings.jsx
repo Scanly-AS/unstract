@@ -5,6 +5,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Col, Divider, Input, Radio, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
@@ -44,6 +45,7 @@ function PlatformSettings() {
   const navigate = useNavigate();
   const handleException = useExceptionHandler();
   const { setPostHogCustomEvent } = usePostHogEvents();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const requestOptions = {
@@ -94,7 +96,9 @@ function PlatformSettings() {
         setKeys(newKeys);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to get the keys"));
+        setAlertDetails(
+          handleException(err, t("platformSettings.failedToGetKeys")),
+        );
       });
   }, []);
 
@@ -150,7 +154,9 @@ function PlatformSettings() {
         setKeys(newKeys);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to generate the key"));
+        setAlertDetails(
+          handleException(err, t("platformSettings.failedToGenerate")),
+        );
       })
       .finally(() => {
         setLoadingIndex(null);
@@ -181,7 +187,9 @@ function PlatformSettings() {
         setKeys(newKeys);
       })
       .catch((err) => {
-        setAlertDetails(handleException(err, "Failed to delete"));
+        setAlertDetails(
+          handleException(err, t("platformSettings.failedToDelete")),
+        );
       })
       .finally(() => {
         setDeletingIndex(null);
@@ -213,7 +221,9 @@ function PlatformSettings() {
 
     axiosPrivate(requestOptions).catch((err) => {
       setActiveKey(prevActiveKey);
-      setAlertDetails(handleException(err, "Failed to set active key"));
+      setAlertDetails(
+        handleException(err, t("platformSettings.failedToSetActive")),
+      );
     });
   };
 
@@ -223,13 +233,13 @@ function PlatformSettings() {
       .then(() => {
         setAlertDetails({
           type: "success",
-          content: "Key copied to clipboard",
+          content: t("platformSettings.keyCopied"),
         });
       })
       .catch((error) => {
         setAlertDetails({
           type: "error",
-          content: "Copy failed",
+          content: t("platformSettings.copyFailed"),
         });
       });
   };
@@ -246,7 +256,7 @@ function PlatformSettings() {
             <ArrowLeftOutlined />
           </Button>
           <Typography.Text className="plt-set-head-typo">
-            Platform Settings
+            {t("platformSettings.title")}
           </Typography.Text>
         </div>
         <div className="plt-set-layout">
@@ -275,7 +285,7 @@ function PlatformSettings() {
                                   disabled={keyDetails?.id === null}
                                   onClick={() => handleToggle(keyIndex)}
                                 >
-                                  Active Key
+                                  {t("platformSettings.activeKey")}
                                 </Radio>
                               </div>
                             </Col>
@@ -305,15 +315,15 @@ function PlatformSettings() {
                                 onClick={() => handleGenerate(keyIndex)}
                               >
                                 {keyDetails?.id?.length > 0
-                                  ? "Refresh"
-                                  : "Generate"}
+                                  ? t("platformSettings.refresh")
+                                  : t("platformSettings.generate")}
                               </Button>
                             </Col>
                             <Col>
                               <ConfirmModal
                                 handleConfirm={() => handleDelete(keyIndex)}
-                                content="Want to delete this platform key? This action cannot be undone."
-                                okText="Delete"
+                                content={t("platformSettings.confirmDeleteKey")}
+                                okText={t("common.delete")}
                               >
                                 <Button
                                   size="small"

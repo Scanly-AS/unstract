@@ -1,6 +1,7 @@
 import { Button, Form, Input, Select, Space } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getBackendErrorDetail } from "../../../helpers/GetStaticData";
 
 const DEFAULT_FORM_DETAILS = {
@@ -63,6 +64,7 @@ function CreateNotification({
   handleUpdate,
   editDetails,
 }) {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [formDetails, setFormDetails] = useState(DEFAULT_FORM_DETAILS);
   const [backendErrors, setBackendErrors] = useState(null);
@@ -125,33 +127,32 @@ function CreateNotification({
 
   const formItems = [
     {
-      label: "Name",
+      label: t("pipelines.name"),
       name: "name",
-      rules: [{ required: true, message: "Please enter name" }],
+      rules: [{ required: true, message: t("pipelines.pleaseEnterName") }],
       component: <Input />,
     },
     {
-      label: "URL",
+      label: t("pipelines.url"),
       name: "url",
-      rules: [{ required: true, message: "Please enter URL" }],
+      rules: [{ required: true, message: t("pipelines.pleaseEnterUrl") }],
       component: <Input />,
-      tooltip:
-        "Provide the URL associated with this item. This field is required.",
+      tooltip: t("pipelines.urlHelp"),
     },
     {
-      label: "Notification Type",
+      label: t("pipelines.notificationType"),
       name: "notification_type",
       component: <Select options={NOTIFICATION_TYPE_ITEMS} />,
-      tooltip: "Select the type of notification you want to send.",
+      tooltip: t("pipelines.notificationTypeHelp"),
     },
     {
-      label: "Platform",
+      label: t("pipelines.platformLabel"),
       name: "platform",
       component: <Select options={PLATFORM_TYPES} />,
-      tooltip: "Choose the platform where the notification will be used.",
+      tooltip: t("pipelines.platformHelp"),
     },
     {
-      label: "Authorization Type",
+      label: t("pipelines.authorizationType"),
       name: "authorization_type",
       component: (
         <Select
@@ -159,38 +160,45 @@ function CreateNotification({
           onChange={handleAuthorizationTypeChange}
         />
       ),
-      tooltip:
-        "Select the type of authorization required for this notification.",
+      tooltip: t("pipelines.authorizationTypeHelp"),
     },
     {
-      label: "Authorization Header",
+      label: t("pipelines.authorizationHeader"),
       name: "authorization_header",
       component: <Input />,
-      tooltip: "Enter the custom authorization header needed for requests.",
+      tooltip: t("pipelines.authorizationHeaderHelp"),
       rules:
         formDetails.authorization_type === "CUSTOM_HEADER"
-          ? [{ required: true, message: "Authorization Header is required" }]
+          ? [
+              {
+                required: true,
+                message: t("pipelines.authorizationHeaderRequired"),
+              },
+            ]
           : [],
       hidden: formDetails.authorization_type !== "CUSTOM_HEADER",
     },
     {
-      label: "Authorization Key",
+      label: t("pipelines.authorizationKey"),
       name: "authorization_key",
       component: <Input />,
-      tooltip:
-        "Provide the authorization key used to validate the notification.",
+      tooltip: t("pipelines.authorizationKeyHelp"),
       rules:
         formDetails.authorization_type !== "NONE"
-          ? [{ required: true, message: "Authorization key is required" }]
+          ? [
+              {
+                required: true,
+                message: t("pipelines.authorizationKeyRequired"),
+              },
+            ]
           : [],
       hidden: formDetails.authorization_type === "NONE",
     },
     {
-      label: "Max Retries",
+      label: t("pipelines.maxRetries"),
       name: "max_retries",
       component: <Input type="number" />,
-      tooltip:
-        "Specify the maximum number of times the notification should be retried if it fails.",
+      tooltip: t("pipelines.maxRetriesHelp"),
     },
   ];
 
@@ -222,9 +230,13 @@ function CreateNotification({
       )}
       <Form.Item className="display-flex-right">
         <Space>
-          <Button onClick={() => setIsForm(false)}>Cancel</Button>
+          <Button onClick={() => setIsForm(false)}>
+            {t("pipelines.cancel")}
+          </Button>
           <Button type="primary" htmlType="submit" loading={isLoading}>
-            {editDetails ? "Update" : "Create"} Notification
+            {editDetails
+              ? t("pipelines.updateNotification")
+              : t("pipelines.createNotification")}
           </Button>
         </Space>
       </Form.Item>

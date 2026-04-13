@@ -8,6 +8,7 @@ import { Input, Modal, Space, Switch, Table, Tooltip, Typography } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useAlertStore } from "../../../store/alert-store";
 import { useSessionStore } from "../../../store/session-store";
@@ -27,6 +28,7 @@ const ManageKeys = ({
   apiService,
   type,
 }) => {
+  const { t } = useTranslation();
   const { sessionDetails } = useSessionStore();
   const axiosPrivate = useAxiosPrivate();
   const handleException = useExceptionHandler();
@@ -101,7 +103,7 @@ const ManageKeys = ({
         addTableData(res?.data);
         setAlertDetails({
           type: "success",
-          content: "Key added successfully",
+          content: t("deployments.keyAddedSuccess"),
         });
       })
       .catch((err) => {
@@ -119,7 +121,7 @@ const ManageKeys = ({
         updateTableData(selectedKeyRow?.id, res?.data);
         setAlertDetails({
           type: "success",
-          content: "Key updated successfully",
+          content: t("deployments.keyUpdatedSuccess"),
         });
       })
       .catch((err) => {
@@ -153,7 +155,7 @@ const ManageKeys = ({
         deleteTableData(selectedKeyRow?.id);
         setAlertDetails({
           type: "success",
-          content: "Key deleted successfully",
+          content: t("deployments.keyDeletedSuccess"),
         });
       })
       .catch((err) => {
@@ -196,7 +198,7 @@ const ManageKeys = ({
       .then((res) => {
         setAlertDetails({
           type: "success",
-          content: "Status updated successfully",
+          content: t("deployments.statusUpdatedSuccess"),
         });
       })
       .catch((err) => {
@@ -213,32 +215,32 @@ const ManageKeys = ({
       .then(() => {
         setAlertDetails({
           type: "success",
-          content: "API key copied to clipboard",
+          content: t("deployments.apiKeyCopied"),
         });
       })
       .catch((error) => {
         setAlertDetails({
           type: "error",
-          content: "Copy failed",
+          content: t("deployments.copyFailed"),
         });
       });
   };
 
   const columns = [
     {
-      title: "Description",
+      title: t("deployments.description"),
       dataIndex: "description",
       key: "description",
     },
     {
-      title: "API Key",
+      title: t("deployments.apiKey"),
       dataIndex: "api_key",
       key: "api_key",
       render: (_, record) => (
         <Space direction="horizontal" className="action-items">
           <div>
             <Tooltip
-              title="click to copy"
+              title={t("deployments.clickToCopy")}
               className="cursorPointer"
               onClick={() => copyText(record?.api_key)}
             >
@@ -252,7 +254,7 @@ const ManageKeys = ({
       ),
     },
     {
-      title: "Active",
+      title: t("deployments.active"),
       key: "is_active",
       dataIndex: "is_active",
       align: "center",
@@ -267,18 +269,21 @@ const ManageKeys = ({
       ),
     },
     {
-      title: "Actions",
+      title: t("deployments.actions"),
       key: "pipeline_id",
       align: "center",
       render: (_, record) => (
         <>
           <Space className="actions" onClick={() => openEditModal(record)}>
-            <Tooltip title="edit" className="cursorPointer">
+            <Tooltip title={t("deployments.editKey")} className="cursorPointer">
               <EditOutlined />
             </Tooltip>
           </Space>
           <Space className="actions" onClick={() => showDeleteModal(record)}>
-            <Tooltip title="delete" className="cursorPointer">
+            <Tooltip
+              title={t("deployments.deleteKey")}
+              className="cursorPointer"
+            >
               <DeleteOutlined />
             </Tooltip>
           </Space>
@@ -290,7 +295,7 @@ const ManageKeys = ({
   return (
     <>
       <Modal
-        title="Manage Keys"
+        title={t("deployments.manageKeys")}
         centered
         maskClosable={false}
         open={isDialogOpen}
@@ -305,7 +310,7 @@ const ManageKeys = ({
             icon={<PlusOutlined />}
             onClick={openAddModal}
           >
-            New Key
+            {t("deployments.newKey")}
           </CustomButton>
         </div>
         <div className="keys-table">
@@ -324,16 +329,18 @@ const ManageKeys = ({
       </Modal>
       {(isNewKey || isEditKey) && (
         <Modal
-          title={isNewKey ? "Add Key" : "Update Key"}
+          title={
+            isNewKey ? t("deployments.addKey") : t("deployments.updateKey")
+          }
           centered
           open={isNewKey || isEditKey}
           onOk={isNewKey ? createKey : updateKey}
-          okText={isNewKey ? "Add" : "Update"}
+          okText={isNewKey ? t("deployments.add") : t("deployments.update")}
           okButtonProps={{ disabled: !canAdd }}
           onCancel={closeAddKey}
         >
           <SpaceWrapper>
-            <Typography>Description</Typography>
+            <Typography>{t("deployments.description")}</Typography>
             <Input
               placeholder="Description"
               name="description"

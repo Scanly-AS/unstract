@@ -14,6 +14,7 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./ExportTool.css";
 
 import { SpinnerLoader } from "../../widgets/spinner-loader/SpinnerLoader";
@@ -32,6 +33,7 @@ function ExportTool({
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [filteredUserList, setFilteredUserList] = useState([]);
   const [sharingOption, setSharingOption] = useState(SHARE_ALL);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const createdByUserId = toolDetails?.created_by?.toString();
@@ -95,7 +97,7 @@ function ExportTool({
   const shareWithUsers = () => {
     if (sharingOption === SHARE_ALL) {
       return (
-        <Typography.Text>Shared with everyone in current org</Typography.Text>
+        <Typography.Text>{t("customTools.sharedWithEveryone")}</Typography.Text>
       );
     }
     return (
@@ -116,10 +118,12 @@ function ExportTool({
                 <div onClick={(event) => event.stopPropagation()} role="none">
                   <Popconfirm
                     key={`${item?.id}-delete`}
-                    title="Delete the User"
-                    description={`Are you sure to remove ${item?.email}?`}
-                    okText="Yes"
-                    cancelText="No"
+                    title={t("customTools.deleteUser")}
+                    description={t("customTools.confirmRemoveUser", {
+                      email: item?.email,
+                    })}
+                    okText={t("common.yes")}
+                    cancelText={t("common.no")}
                     icon={<QuestionCircleOutlined />}
                     onConfirm={(event) => handleDeleteUser(item?.id)}
                   >
@@ -146,10 +150,7 @@ function ExportTool({
             </List.Item>
           )}
         />
-        <Typography>
-          Exported Tools are always shared with the Prompt Studio projects owner
-          and users in addition to other users it is explicitly shared with
-        </Typography>
+        <Typography>{t("customTools.exportedNote")}</Typography>
       </>
     );
   };
@@ -157,13 +158,13 @@ function ExportTool({
   return (
     toolDetails && (
       <Modal
-        title={"Export settings"}
+        title={t("customTools.exportSettings")}
         open={open}
         onCancel={() => setOpen(false)}
         maskClosable={false}
         centered
         closable={true}
-        okText={"Apply"}
+        okText={t("customTools.apply")}
         onOk={() =>
           onApply(selectedUsers, toolDetails, sharingOption === SHARE_ALL)
         }
@@ -180,9 +181,11 @@ function ExportTool({
                 className="export-per-radio"
               >
                 <Radio value={SHARE_ALL}>
-                  Share with everyone in current org
+                  {t("customTools.shareWithEveryone")}
                 </Radio>
-                <Radio value={SHARE_CUSTOM}>Custom share</Radio>
+                <Radio value={SHARE_CUSTOM}>
+                  {t("customTools.customShare")}
+                </Radio>
               </Radio.Group>
             )}
             {sharingOption !== SHARE_ALL && (
@@ -190,7 +193,7 @@ function ExportTool({
                 filterOption={filterOption}
                 showSearch
                 size={"middle"}
-                placeholder="Search"
+                placeholder={t("customTools.search")}
                 className="export-permission-search"
                 onChange={(selectedUser) => {
                   const isUserSelected = selectedUsers.includes(selectedUser);
@@ -213,7 +216,9 @@ function ExportTool({
                 })}
               </Select>
             )}
-            <Typography.Title level={5}>Shared with</Typography.Title>
+            <Typography.Title level={5}>
+              {t("customTools.sharedWith")}
+            </Typography.Title>
             {shareWithUsers()}
           </>
         )}

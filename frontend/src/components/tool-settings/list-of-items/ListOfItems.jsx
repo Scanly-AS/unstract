@@ -1,6 +1,7 @@
 import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import { Card, Dropdown, Image } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 import { ConfirmModal } from "../../widgets/confirm-modal/ConfirmModal";
 import { EmptyState } from "../../widgets/empty-state/EmptyState";
@@ -14,6 +15,7 @@ function ListOfItems({
   handleDelete,
   handleClick,
 }) {
+  const { t } = useTranslation();
   if (isLoading) {
     return <SpinnerLoader />;
   }
@@ -54,7 +56,7 @@ function ListOfItems({
                         label: (
                           <ConfirmModal
                             handleConfirm={() => handleDelete(item?.id)}
-                            content="Want to delete this profile"
+                            content={t("customTools.wantToDeleteProfile")}
                           >
                             Delete
                           </ConfirmModal>

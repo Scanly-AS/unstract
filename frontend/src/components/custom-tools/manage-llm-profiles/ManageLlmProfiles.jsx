@@ -1,6 +1,7 @@
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Radio, Table, Tooltip, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
@@ -14,46 +15,48 @@ import { AddLlmProfile } from "../add-llm-profile/AddLlmProfile";
 import "./ManageLlmProfiles.css";
 import usePostHogEvents from "../../../hooks/usePostHogEvents";
 
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "LLM",
-    dataIndex: "llm",
-    key: "llm",
-  },
-  {
-    title: "Embedding Model",
-    dataIndex: "embedding_model",
-    key: "embedding_model",
-  },
-  {
-    title: "Vector Database",
-    dataIndex: "vector_db",
-    key: "vector_db",
-  },
-  {
-    title: "Text Extractor",
-    dataIndex: "text_extractor",
-    key: "text_extractor",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    key: "actions",
-    width: 120,
-  },
-  {
-    title: "Select Default",
-    dataIndex: "select",
-    key: "select",
-    align: "center",
-  },
-];
 function ManageLlmProfiles() {
+  const { t } = useTranslation();
+
+  const columns = [
+    {
+      title: t("common.name"),
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: t("customTools.llm"),
+      dataIndex: "llm",
+      key: "llm",
+    },
+    {
+      title: t("customTools.embeddingModel"),
+      dataIndex: "embedding_model",
+      key: "embedding_model",
+    },
+    {
+      title: t("customTools.vectorDatabase"),
+      dataIndex: "vector_db",
+      key: "vector_db",
+    },
+    {
+      title: t("sidebar.textExtractor"),
+      dataIndex: "text_extractor",
+      key: "text_extractor",
+    },
+    {
+      title: t("common.actions"),
+      dataIndex: "actions",
+      key: "actions",
+      width: 120,
+    },
+    {
+      title: t("customTools.selectDefault"),
+      dataIndex: "select",
+      key: "select",
+      align: "center",
+    },
+  ];
   const [rows, setRows] = useState([]);
   const [isAddLlm, setIsAddLlm] = useState(false);
   const [editLlmProfileId, setEditLlmProfileId] = useState(null);
@@ -192,7 +195,7 @@ function ManageLlmProfiles() {
     navigator.clipboard.writeText(profileId);
     setAlertDetails({
       type: "success",
-      content: "Profile ID copied to clipboard",
+      content: t("customTools.profileIdCopied"),
     });
   };
 

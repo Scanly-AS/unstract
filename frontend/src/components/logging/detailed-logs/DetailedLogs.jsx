@@ -24,8 +24,8 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
 import { useAlertStore } from "../../../store/alert-store";
@@ -75,7 +75,7 @@ StatusMessageCell.propTypes = {
 // Action column header with visibility dropdown
 const ActionColumnHeader = ({ menu }) => (
   <div className="action-column-header">
-    <span>Action</span>
+    <span>{t("logging.action")}</span>
     <Dropdown menu={menu} trigger={["click"]} placement="bottomRight">
       <span className="column-settings-trigger">
         <MoreOutlined className="column-settings-icon" />
@@ -98,6 +98,7 @@ const DetailedLogs = () => {
   const { sessionDetails } = useSessionStore();
   const { getUrl } = useRequestUrl();
   const copyToClipboard = useCopyToClipboard();
+  const { t } = useTranslation();
   const cameFromDashboard = location.state?.from === "dashboard";
 
   const [executionDetails, setExecutionDetails] = useState();
@@ -250,7 +251,7 @@ const DetailedLogs = () => {
   // - Status Message gets most space as it contains the most important variable info
   const columnsDetailedTable = [
     {
-      title: "Executed At",
+      title: t("logging.executedAt"),
       dataIndex: "executedAt",
       key: "executedAt",
       width: 140,
@@ -290,7 +291,7 @@ const DetailedLogs = () => {
       render: (text) => <StatusMessageCell text={text} />,
     },
     {
-      title: "Status",
+      title: t("logging.status"),
       dataIndex: "status",
       key: "status",
       width: 110,
@@ -319,19 +320,19 @@ const DetailedLogs = () => {
         ]
       : []),
     {
-      title: "Execution Time",
+      title: t("logging.executionTime"),
       dataIndex: "executionTime",
       key: "executionTime",
       width: 90,
       sorter: true,
     },
     {
-      title: "Action",
+      title: t("logging.action"),
       dataIndex: "action",
       key: "action",
       width: 60,
       render: (_, record) => (
-        <Tooltip title="View logs">
+        <Tooltip title={t("logging.viewLogs")}>
           <Button
             icon={<EyeOutlined />}
             onClick={() => handleLogsModalOpen(record)}
@@ -525,7 +526,7 @@ const DetailedLogs = () => {
                     ? "Processing files"
                     : "Processed files"}{" "}
                   -{" "}
-                  <Tooltip title="Total files">
+                  <Tooltip title={t("logging.totalFiles")}>
                     <span className="status-container">
                       <FileTextOutlined className="gen-index-progress" />{" "}
                       {executionDetails?.totalFiles}
@@ -533,19 +534,19 @@ const DetailedLogs = () => {
                   </Tooltip>
                 </Typography>
                 <span>
-                  <Tooltip title="Successful files">
+                  <Tooltip title={t("logging.successfulFiles")}>
                     <span className="status-container">
                       <InfoCircleFilled className="gen-index-success" />{" "}
                       {executionDetails?.successfulFiles}
                     </span>
                   </Tooltip>
-                  <Tooltip title="Failed files">
+                  <Tooltip title={t("logging.failedFiles")}>
                     <span className="status-container">
                       <CloseCircleFilled className="gen-index-fail" />{" "}
                       {executionDetails?.failedFiles}
                     </span>
                   </Tooltip>
-                  <Tooltip title="In Progress files">
+                  <Tooltip title={t("logging.inProgressFiles")}>
                     {executionDetails?.totalFiles -
                       (executionDetails?.successfulFiles +
                         executionDetails?.failedFiles) >
@@ -580,7 +581,11 @@ const DetailedLogs = () => {
             showSizeChanger: true,
             pageSizeOptions: ["10", "20", "50", "100"],
             showTotal: (total, range) =>
-              `${range[0]}-${range[1]} of ${total} files`,
+              t("logging.paginationRange", {
+                start: range[0],
+                end: range[1],
+                total,
+              }),
           }}
           bordered
           size="small"
@@ -599,4 +604,5 @@ const DetailedLogs = () => {
     </div>
   );
 };
+
 export { DetailedLogs };

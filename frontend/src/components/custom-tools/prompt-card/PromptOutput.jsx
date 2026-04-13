@@ -17,6 +17,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   displayPromptResult,
@@ -80,6 +81,7 @@ function PromptOutput({
     details,
   } = useCustomToolStore();
   const { setAlertDetails } = useAlertStore();
+  const { t } = useTranslation();
   const { generatePromptOutputKey } = usePromptOutput();
   const isTableExtraction = enforceType === TABLE;
   const noHighlightEnforceType = !["table", "record"].includes(enforceType);
@@ -137,13 +139,13 @@ function PromptOutput({
       .then(() => {
         setAlertDetails({
           type: "success",
-          content: "Prompt output copied successfully",
+          content: t("customTools.promptOutputCopied"),
         });
       })
       .catch(() => {
         setAlertDetails({
           type: "error",
-          content: "Failed to copy prompt output",
+          content: t("customTools.failedToCopyOutput"),
         });
       });
   };

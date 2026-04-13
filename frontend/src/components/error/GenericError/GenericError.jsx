@@ -1,55 +1,53 @@
 import { Result } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
 function GenericError() {
   const [searchParams] = useSearchParams();
   const [messages, setMessages] = useState({});
   const [id, setId] = useState(null);
+  const { t } = useTranslation();
   useEffect(() => {
     // Simulating fetching JSON data with key-value pairs
     const jsonData = {
       IDM: {
-        title: "Sorry, but this invitation is not meant for you.",
-        subtitle:
-          "Please make sure to use the same email address that you were invited with. If that doesn't work, contact the organization owner to send you another invite.",
+        title: t("errors.IDM_title"),
+        subtitle: t("errors.IDM_subtitle"),
       },
       INF: {
-        title: "This invitation is either invalid or has expired.",
-        subtitle:
-          "Please contact the organization owner to send you another invite.",
+        title: t("errors.INF_title"),
+        subtitle: t("errors.INF_subtitle"),
       },
       UMM: {
-        title: "Sorry, but you seem to be a member of multiple organizations.",
-        subtitle: "This is not allowed normally. Please contact support.",
+        title: t("errors.UMM_title"),
+        subtitle: t("errors.UMM_subtitle"),
       },
       USF: {
-        title: `We're unable to create your account since an account for your organization ${searchParams.get(
-          "domain",
-        )} already exists.`,
-        subtitle:
-          "You'll need to contact the admin of your organization's account to get access or you'll need to use a different email address to sign up.",
+        title: t("errors.USF_title", {
+          domain: searchParams.get("domain"),
+        }),
+        subtitle: t("errors.USF_subtitle"),
       },
       USR: {
-        title: `Sign-up not allowed.`,
-        subtitle:
-          "You'll need to contact the admin of your organization's account to get access.",
+        title: t("errors.USR_title"),
+        subtitle: t("errors.USR_subtitle"),
       },
       INE001: {
-        title: `Email not allowed`,
-        subtitle: "Disposable emails not allowed.",
+        title: t("errors.INE001_title"),
+        subtitle: t("errors.INE001_subtitle"),
       },
       INE002: {
-        title: `Invalid Email format`,
-        subtitle: "Please give a valid email address",
+        title: t("errors.INE002_title"),
+        subtitle: t("errors.INE002_subtitle"),
       },
       INE003: {
-        title: `Email not allowed`,
-        subtitle: "This email is forbidden.",
+        title: t("errors.INE003_title"),
+        subtitle: t("errors.INE003_subtitle"),
       },
       INS: {
-        title: `Access Denied`,
-        subtitle: "Please contact your administrator to request access.",
+        title: t("errors.INS_title"),
+        subtitle: t("errors.INS_subtitle"),
       },
 
       // Add more key-value pairs as needed
@@ -64,14 +62,12 @@ function GenericError() {
     <Result
       status="403"
       title={
-        id && messages[id]
-          ? messages[id].title
-          : "Hm, you shouldn't see this normally."
+        id && messages[id] ? messages[id].title : t("errors.genericDefault")
       }
       subTitle={
         id && messages[id]
           ? messages[id].subtitle
-          : "Please try to login again for accessing your data."
+          : t("errors.genericDefaultSubtitle")
       }
     />
   );

@@ -2,6 +2,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import { Modal, message, Typography, Upload } from "antd";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AdapterSelectionModal } from "../adapter-selection-modal/AdapterSelectionModal";
 import "./ImportTool.css";
@@ -14,6 +15,7 @@ function ImportTool({ open, setOpen, onImport, loading }) {
   const [projectData, setProjectData] = useState(null);
   const [showAdapterSelection, setShowAdapterSelection] = useState(false);
   const [parseLoading, setParseLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleUploadChange = (info) => {
     setFileList(info.fileList);
@@ -21,7 +23,7 @@ function ImportTool({ open, setOpen, onImport, loading }) {
 
   const handleImport = () => {
     if (fileList.length === 0) {
-      message.error("Please select a file to import");
+      message.error(t("customTools.pleaseSelectFile"));
       return;
     }
 
@@ -40,7 +42,7 @@ function ImportTool({ open, setOpen, onImport, loading }) {
         // Validate required structure
         const requiredKeys = ["tool_metadata", "tool_settings", "prompts"];
         if (!requiredKeys.every((key) => projectData[key])) {
-          message.error("Invalid project file structure");
+          message.error(t("customTools.invalidStructure"));
           setParseLoading(false);
           return;
         }
@@ -49,13 +51,13 @@ function ImportTool({ open, setOpen, onImport, loading }) {
         setShowAdapterSelection(true);
         setParseLoading(false);
       } catch (error) {
-        message.error("Invalid JSON file");
+        message.error(t("customTools.invalidJSON"));
         setParseLoading(false);
       }
     };
 
     reader.onerror = () => {
-      message.error("Failed to read file");
+      message.error(t("customTools.failedToReadFile"));
       setParseLoading(false);
     };
 
@@ -89,32 +91,26 @@ function ImportTool({ open, setOpen, onImport, loading }) {
 
   return (
     <Modal
-      title="Import Project"
+      title={t("customTools.importProject")}
       open={open}
       onOk={handleImport}
       onCancel={handleCancel}
       confirmLoading={loading || parseLoading}
-      okText="Import"
-      cancelText="Cancel"
+      okText={t("customTools.import")}
+      cancelText={t("common.cancel")}
       width={600}
     >
       <div className="import-tool-content">
         <Text type="secondary" className="import-tool-description">
-          Import a project configuration from a previously exported JSON file.
-          This will create a new project with all settings and prompts.
+          {t("customTools.importDescription")}
         </Text>
 
         <Dragger {...uploadProps}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Support for a single JSON file only. Select the project
-            configuration file exported from Prompt Studio.
-          </p>
+          <p className="ant-upload-text">{t("customTools.clickOrDrag")}</p>
+          <p className="ant-upload-hint">{t("customTools.singleJSONOnly")}</p>
         </Dragger>
       </div>
 

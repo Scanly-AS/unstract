@@ -1,6 +1,7 @@
 import { Form, Input, Modal } from "antd";
 import PropTypes from "prop-types";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getBackendErrorDetail } from "../../../helpers/GetStaticData";
 
 const { TextArea } = Input;
@@ -16,6 +17,7 @@ function NewWorkflow({
   backendErrors,
   setBackendErrors,
 }) {
+  const { t } = useTranslation();
   const [disableCreation, setDisableCreation] = useState(true);
   const nameRef = useRef(name);
   const descriptionRef = useRef(description);
@@ -65,13 +67,15 @@ function NewWorkflow({
 
   return (
     <Modal
-      title={name ? "Edit Workflow" : "New Workflow"}
+      title={name ? t("workflows.editWorkflow") : t("workflows.newWorkflow")}
       open={openModal}
       onCancel={onCancel}
       onOk={onCreate}
       centered
       maskClosable={false}
-      okText={name ? "Edit Workflow" : "Create Workflow"}
+      okText={
+        name ? t("workflows.editWorkflow") : t("workflows.createWorkflow")
+      }
       width="400px"
       okButtonProps={{ disabled: disableCreation, loading: loading }}
     >
@@ -82,9 +86,9 @@ function NewWorkflow({
         onValuesChange={handleInputChange}
       >
         <Form.Item
-          label="Workflow Name"
+          label={t("workflows.workflowName")}
           name="workflow_name"
-          rules={[{ required: true, message: "Please enter Workflow name!" }]}
+          rules={[{ required: true, message: t("workflows.pleaseEnterName") }]}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           validateStatus={
@@ -95,9 +99,11 @@ function NewWorkflow({
           <Input defaultValue={nameRef.current} onChange={updateName} />
         </Form.Item>
         <Form.Item
-          label="Description"
+          label={t("workflows.description")}
           name="workflow_description"
-          rules={[{ required: true, message: "Please enter Description!" }]}
+          rules={[
+            { required: true, message: t("workflows.pleaseEnterDescription") },
+          ]}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           validateStatus={

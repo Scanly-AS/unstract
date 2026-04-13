@@ -2,6 +2,7 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Col, Input, Row, Typography } from "antd";
 import debounce from "lodash/debounce";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import "./TopBar.css";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +14,7 @@ function TopBar({
   children,
 }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const onSearchDebounce = debounce(({ target: { value } }) => {
     onSearch(value);
   }, 600);
@@ -39,7 +41,10 @@ function TopBar({
       <Col>
         <div className="invite-user-search">
           {enableSearch && (
-            <Input placeholder="Search Users" onChange={onSearchDebounce} />
+            <Input
+              placeholder={t("widgets.searchUsers")}
+              onChange={onSearchDebounce}
+            />
           )}
           {children}
         </div>

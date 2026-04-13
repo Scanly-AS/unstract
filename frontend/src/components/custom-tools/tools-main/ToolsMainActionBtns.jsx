@@ -1,6 +1,7 @@
 import { BarChartOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Button, Space, Tooltip } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAxiosPrivate } from "../../../hooks/useAxiosPrivate";
 import { useExceptionHandler } from "../../../hooks/useExceptionHandler";
@@ -64,6 +65,7 @@ function ToolsMainActionBtns() {
   const axiosPrivate = useAxiosPrivate();
   const { setAlertDetails } = useAlertStore();
   const handleException = useExceptionHandler();
+  const { t } = useTranslation();
 
   const tokenUsageId = useMemo(
     () => `single_pass__${defaultLlmProfile}__${selectedDoc?.document_id}`,
@@ -130,14 +132,14 @@ function ToolsMainActionBtns() {
           />
         )}
         {!singlePassExtractMode && <RunAllPrompts />}
-        <Tooltip title="Output Analyzer">
+        <Tooltip title={t("customTools.outputAnalyzer")}>
           <Button
             icon={<BarChartOutlined />}
             onClick={handleOutputAnalyzerBtnClick}
             disabled={isMultiPassExtractLoading || isSinglePassExtractLoading}
           />
         </Tooltip>
-        <Tooltip title="Reorder the list of prompts">
+        <Tooltip title={t("customTools.reorderPrompts")}>
           <Button
             icon={<UnorderedListOutlined />}
             onClick={() => setOpenReorderModal(true)}

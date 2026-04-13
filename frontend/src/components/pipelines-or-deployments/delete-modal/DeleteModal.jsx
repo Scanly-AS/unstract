@@ -1,15 +1,17 @@
 import { Modal } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 const DeleteModal = ({ open, setOpen, deleteRecord }) => {
+  const { t } = useTranslation();
   return (
     <Modal
-      title="Are you sure you want to delete this?"
+      title={t("pipelines.confirmDelete")}
       centered
       open={open}
       onOk={deleteRecord}
       onCancel={() => setOpen(false)}
-      okText="Delete"
+      okText={t("pipelines.delete")}
       width={500}
     ></Modal>
   );

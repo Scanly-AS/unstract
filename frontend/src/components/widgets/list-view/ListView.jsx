@@ -8,6 +8,7 @@ import {
   Typography,
 } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import "./ListView.css";
 import {
   DeleteOutlined,
@@ -35,6 +36,7 @@ function ListView({
   type,
 }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { sessionDetails } = useSessionStore();
   const handleDeleteClick = (event, tool) => {
     event.stopPropagation(); // Stop propagation to prevent list item click
@@ -143,8 +145,8 @@ function ListView({
             key={`${item.id}-delete`}
             title={`Delete the ${type}`}
             description={`Are you sure to delete ${item[titleProp]}`}
-            okText="Yes"
-            cancelText="No"
+            okText={t("widgets.yes")}
+            cancelText={t("widgets.no")}
             icon={<QuestionCircleOutlined />}
             onConfirm={(event) => {
               handleDeleteClick(event, item);

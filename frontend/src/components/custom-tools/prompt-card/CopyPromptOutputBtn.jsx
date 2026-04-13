@@ -1,10 +1,12 @@
 import { CopyOutlined } from "@ant-design/icons";
 import { Button, Tooltip } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 function CopyPromptOutputBtn({ isDisabled, copyToClipboard }) {
+  const { t } = useTranslation();
   return (
-    <Tooltip title="Copy prompt output">
+    <Tooltip title={t("customTools.copyPromptOutput")}>
       <Button
         size="small"
         type="text"

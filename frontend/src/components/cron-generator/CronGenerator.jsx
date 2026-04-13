@@ -1,10 +1,12 @@
 import { Modal } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Cron } from "react-js-cron";
 import "react-js-cron/dist/styles.css";
 import PropTypes from "prop-types";
 
 function CronGenerator({ open, showCronGenerator, setCronValue }) {
+  const { t } = useTranslation();
   const [cronState, setCronState] = useState("0 * * * *");
   const handleCancel = () => {
     showCronGenerator(false);
@@ -17,7 +19,7 @@ function CronGenerator({ open, showCronGenerator, setCronValue }) {
 
   return (
     <Modal
-      title="Choose Cron schedule"
+      title={t("widgets.chooseCronSchedule")}
       open={open}
       maskClosable={false}
       closable={false}

@@ -1,6 +1,7 @@
 import { CheckCircleFilled } from "@ant-design/icons";
 import { Button, Card, Col, Layout, Row, Space, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import ConnectEmbedding from "../../assets/connect_embedding.svg";
 import ConnectLLM from "../../assets/connect_llm.svg";
@@ -16,6 +17,7 @@ const { Content } = Layout;
 
 function OnBoard() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { sessionDetails } = useSessionStore();
   const { orgName, adapters } = sessionDetails;
   const [openAddSourcesModal, setOpenAddSourcesModal] = useState(false);
@@ -32,35 +34,31 @@ function OnBoard() {
   const steps = [
     {
       id: 1,
-      title: "CONNECT AN LLM",
+      title: t("onboard.connectLLM"),
       icon: ConnectLLM,
       type: "llm",
-      description:
-        "Unstract harnesses Large Language Models (LLMs) to organize and analyze vast unstructured data, offering support for diverse LLMs from multiple providers.",
+      description: t("onboard.connectLLMDesc"),
     },
     {
       id: 2,
-      title: "CONNECT A VECTOR DATABASE",
+      title: t("onboard.connectVectorDB"),
       icon: ConnectVectorDb,
       type: "vector_db",
-      description:
-        "Vector Databases locate text segments within unstructured source data, facilitating the retrieval of pertinent information for LLMs to process queries or structure unstructured data efficiently.",
+      description: t("onboard.connectVectorDBDesc"),
     },
     {
       id: 3,
-      title: "CHOOSE AN EMBEDDING MODEL",
+      title: t("onboard.chooseEmbedding"),
       icon: ConnectEmbedding,
       type: "embedding",
-      description:
-        "Embedding models semantically map unstructured data for precise retrieval, impacting the quality of data organization and search relevance.",
+      description: t("onboard.chooseEmbeddingDesc"),
     },
     {
       id: 4,
-      title: "CONNECT A TEXT EXTRACTOR",
+      title: t("onboard.connectTextExtractor"),
       icon: ConnectTextExtractor,
       type: "x2text",
-      description:
-        "The Text Extractor extracts text from diverse unstructured documents, optimizing input for LLM comprehension, including OCR as needed, ensuring optimal understanding of content.",
+      description: t("onboard.connectTextExtractorDesc"),
     },
   ];
 
@@ -79,9 +77,7 @@ function OnBoard() {
       <Content className="onboard-content">
         <div>
           <img src={logo} alt="Logo" className="landing-logo" />
-          <h1 className="uppercase-text">
-            You&apos;re 4 steps away from nirvana
-          </h1>
+          <h1 className="uppercase-text">{t("onboard.stepsAway")}</h1>
           <Space direction="vertical">
             {steps.map((step, index) => (
               <Card key={step.id} className="card-style">
@@ -112,14 +108,16 @@ function OnBoard() {
                     {adaptersList?.includes(step.type) ? (
                       <div>
                         <CheckCircleFilled className="configured-icon" />
-                        <span className="configured-text">Configured</span>
+                        <span className="configured-text">
+                          {t("onboard.configured")}
+                        </span>
                       </div>
                     ) : (
                       <Button
                         className="button-style"
                         onClick={() => showOpenAddSourcesModal(step.type)}
                       >
-                        Connect
+                        {t("onboard.connect")}
                       </Button>
                     )}
                   </Col>
@@ -129,19 +127,19 @@ function OnBoard() {
           </Space>
           <div className="later-div-style">
             <div className="help-text">
-              Need help? Here&apos;s our&nbsp;
+              {t("onboard.needHelp")}&nbsp;
               <a
                 href="https://docs.unstract.com/"
                 target="_blank"
                 rel="noreferrer"
                 className="link-color"
               >
-                quick start guide&nbsp;
+                {t("onboard.quickStartGuide")}&nbsp;
               </a>
-              to help you get going.
+              {t("onboard.toHelp")}
             </div>
             <CustomButton type="primary" onClick={() => navigate(homePageUrl)}>
-              Complete Later &gt;
+              {t("onboard.completeLater")}
             </CustomButton>
           </div>
         </div>

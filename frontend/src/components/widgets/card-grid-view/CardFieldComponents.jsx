@@ -21,6 +21,7 @@ import {
   Typography,
 } from "antd";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import WorkflowIcon from "../../../assets/Workflows.svg";
 import {
@@ -42,6 +43,7 @@ function CardActionBox({
   deleteTitle = "Delete item?",
   kebabMenuItems,
 }) {
+  const { t } = useTranslation();
   const handleEditAction = (e) => {
     e.stopPropagation();
     setSelectedItem(item);
@@ -70,14 +72,14 @@ function CardActionBox({
       />
       <Popconfirm
         title={deleteTitle}
-        description="This action cannot be undone."
+        description={t("widgets.cannotBeUndone")}
         onConfirm={() => {
           setSelectedItem(item);
           onDelete?.(item);
         }}
         onCancel={(e) => e?.stopPropagation()}
-        okText="Delete"
-        cancelText="Cancel"
+        okText={t("widgets.delete")}
+        cancelText={t("widgets.cancel")}
         okButtonProps={{ danger: true }}
       >
         <Button
@@ -306,7 +308,7 @@ function ApiEndpointSection({ apiEndpoint }) {
                 {shortenApiEndpoint(apiEndpoint)}
               </Typography.Text>
             </Tooltip>
-            <Tooltip title="Copy endpoint">
+            <Tooltip title={t("widgets.copyEndpoint")}>
               <Button
                 className="copy-btn-outlined"
                 icon={<CopyOutlined />}
@@ -363,11 +365,11 @@ CardHeaderRow.propTypes = {
 };
 
 export {
-  CardActionBox,
-  OwnerFieldRow,
-  LastRunFieldRow,
-  Last5RunsFieldRow,
-  WorkflowFieldRow,
   ApiEndpointSection,
+  CardActionBox,
   CardHeaderRow,
+  Last5RunsFieldRow,
+  LastRunFieldRow,
+  OwnerFieldRow,
+  WorkflowFieldRow,
 };

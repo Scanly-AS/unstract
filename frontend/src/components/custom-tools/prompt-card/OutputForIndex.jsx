@@ -1,6 +1,7 @@
 import { Button, Input, Modal, Typography } from "antd";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./PromptCard.css";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { uniqueId } from "lodash";
@@ -9,6 +10,7 @@ import debounce from "lodash/debounce";
 import { TextViewerPre } from "../text-viewer-pre/TextViewerPre";
 
 function OutputForIndex({ chunkData, setIsIndexOpen, isIndexOpen }) {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [highlightedChunks, setHighlightedChunks] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -136,7 +138,7 @@ function OutputForIndex({ chunkData, setIsIndexOpen, isIndexOpen }) {
 
   return (
     <Modal
-      title="Index Data"
+      title={t("customTools.indexData")}
       open={isIndexOpen}
       onCancel={handleClose}
       className="index-output-modal"
@@ -146,7 +148,7 @@ function OutputForIndex({ chunkData, setIsIndexOpen, isIndexOpen }) {
     >
       <div className="chunk-search-container">
         <Input
-          placeholder="Search..."
+          placeholder={t("customTools.searchPlaceholder")}
           value={searchTerm}
           onChange={handleSearchChange}
           className="chunk-search-input"
@@ -175,7 +177,9 @@ function OutputForIndex({ chunkData, setIsIndexOpen, isIndexOpen }) {
       <div className="index-output-tab">
         {chunks?.map((chunk, chunkIndex) => (
           <div key={uniqueId()} className="chunk-container">
-            <Typography.Text strong>Chunk {chunkIndex + 1}</Typography.Text>
+            <Typography.Text strong>
+              {t("customTools.chunk", { index: chunkIndex + 1 })}
+            </Typography.Text>
             <TextViewerPre
               text={
                 <>
